@@ -2,7 +2,7 @@
   "name": "react-helmet",
   "description": "A document head manager for React",
   "version": "5.2.0",
-  "main": "./lib/Helmet.js",
+  "main": "./lib/index.js",
   "author": "NFL <engineers@nfl.com>",
   "contributors": [
     "Chris Welch <chris.welch@nfl.com>"
@@ -24,16 +24,23 @@
     "script",
     "base",
     "noscript",
-    "style"
+    "style",
+    "thread-safe",
+    "stream",
+    "renderToNodeStream",
+    "renderToStaticNodeStream"
   ],
   "peerDependencies": {
     "react": ">=15.0.0"
   },
   "dependencies": {
     "deep-equal": "^1.0.1",
+    "exenv": "^1.2.2",
     "object-assign": "^4.1.1",
-    "react-side-effect": "^1.1.0",
-    "prop-types": "^15.5.4"
+    "prop-types": "^15.5.4",
+    "raf": "^3.4.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",

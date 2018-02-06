@@ -1,5 +1,3 @@
-<img align="right" width="200" src="http://static.nfl.com/static/content/public/static/img/logos/react-helmet.jpg" />
-
 # React Helmet
 
 [![npm Version](https://img.shields.io/npm/v/react-helmet.svg?style=flat-square)](https://www.npmjs.org/package/react-helmet)
@@ -36,19 +34,29 @@ class Application extends React.Component {
 Nested or latter components will override duplicate changes:
 
 ```javascript
-<Parent>
-    <Helmet>
-        <title>My Title</title>
-        <meta name="description" content="Helmet application" />
-    </Helmet>
+import ReactDOM from 'react-dom';
+import { HelmetProvider, createHelmetStore } from 'react-helmet';
 
-    <Child>
-        <Helmet>
-            <title>Nested Title</title>
-            <meta name="description" content="Nested component" />
-        </Helmet>
-    </Child>
-</Parent>
+function bootstrap() {
+    const helmetStore = createHelmetStore();
+    ReactDOM.render(
+        <HelmetProvider store={helmetStore}>
+            <Parent>
+                <Helmet>
+                    <title>My Title</title>
+                    <meta name="description" content="Helmet application" />
+                </Helmet>
+                <Child>
+                    <Helmet>
+                        <title>Nested Title</title>
+                        <meta name="description" content="Nested component" />
+                    </Helmet>
+                </Child>
+            </Parent>
+        </HelmetProvider>,
+        document.getElementById('app')
+    );
+}
 ```
 
 outputs:
@@ -87,13 +95,18 @@ npm install --save react-helmet
 ```
 
 ## Server Usage
-To use on the server, call `Helmet.renderStatic()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
-
-Because this component keeps track of mounted instances, **you have to make sure to call `renderStatic` on server**, or you'll get a memory leak.
+To use on the server, call `renderHelmetStatic()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
 
 ```javascript
-ReactDOMServer.renderToString(<Handler />);
-const helmet = Helmet.renderStatic();
+import { createHelmetStore, renderHelmetStatic, HelmetProvider } from 'react-helmet';
+
+const helmetStore = createHelmetStore();
+ReactDOMServer.renderToString(
+    <HelmetProvider store={helmetStore}
+        <Handler />
+    </HelmetProvider>
+);
+const helmet = renderHelmetStatic(store);
 ```
 
 This `helmet` instance contains the following properties:
@@ -150,8 +163,46 @@ function HTML () {
     );
 }
 ```
+## Server Usage with `ReactDOMServer.renderToNodeStream()` and `ReactDOMServer.renderToStaticNodeStream()`
 
-### Reference Guide
+``` javascript
+import stream from 'stream';
+
+class DrainWritable extends stream.Writable {
+    constructor(options) {
+        super(options);
+        this.buffer = '';
+    }
+
+    _write(chunk, encoding, cb) {
+        this.buffer += chunk;
+        cb();
+    }
+}
+
+new Promise((resolve, reject) => {
+    const writable = new DrainWritable();
+    const helmetStore = createHelmetStore();
+    ReactDOMServer.renderToNodeStream(
+        <HelmetProvider store={helmetStore}>
+          <App />
+        </HelmetProvider>,
+    ).pipe(writable);
+
+    writable.on('finish', () => {
+        const helmetObj = renderHelmetStatic(helmetStore);
+        resolve({
+            body: writable.buffer,
+            helmet,
+        });
+    });
+    writable.on('error', reject);
+}).then(({body, helmet}) => {
+    // Create html with body and helmet object
+});
+```
+
+## Reference Guide
 
 ```javascript
 <Helmet

@@ -1,5 +1,7 @@
 import React from "react";
 import objectAssign from "object-assign";
+import raf from "raf";
+
 import {
     ATTRIBUTE_NAMES,
     HELMET_ATTRIBUTE,
@@ -248,41 +250,6 @@ const reducePropsToState = propsList => ({
     )
 });
 
-const rafPolyfill = (() => {
-    let clock = Date.now();
-
-    return (callback: Function) => {
-        const currentTime = Date.now();
-
-        if (currentTime - clock > 16) {
-            clock = currentTime;
-            callback(currentTime);
-        } else {
-            setTimeout(() => {
-                rafPolyfill(callback);
-            }, 0);
-        }
-    };
-})();
-
-const cafPolyfill = (id: string | number) => clearTimeout(id);
-
-const requestAnimationFrame =
-    typeof window !== "undefined"
-        ? window.requestAnimationFrame ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame ||
-          rafPolyfill
-        : global.requestAnimationFrame || rafPolyfill;
-
-const cancelAnimationFrame =
-    typeof window !== "undefined"
-        ? window.cancelAnimationFrame ||
-          window.webkitCancelAnimationFrame ||
-          window.mozCancelAnimationFrame ||
-          cafPolyfill
-        : global.cancelAnimationFrame || cafPolyfill;
-
 const warn = msg => {
     return console && typeof console.warn === "function" && console.warn(msg);
 };
@@ -291,11 +258,11 @@ let _helmetCallback = null;
 
 const handleClientStateChange = newState => {
     if (_helmetCallback) {
-        cancelAnimationFrame(_helmetCallback);
+        raf.cancel(_helmetCallback);
     }
 
     if (newState.defer) {
-        _helmetCallback = requestAnimationFrame(() => {
+        _helmetCallback = raf(() => {
             commitTagChanges(newState, () => {
                 _helmetCallback = null;
             });
@@ -643,5 +610,4 @@ export {convertReactPropstoHtmlAttributes};
 export {handleClientStateChange};
 export {mapStateOnServer};
 export {reducePropsToState};
-export {requestAnimationFrame};
 export {warn};
