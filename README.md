@@ -3,6 +3,8 @@
 # React Safety Helmet
 
 [![npm Version](https://img.shields.io/npm/v/react-safety-helmet.svg?style=flat-square)](https://www.npmjs.org/package/react-helmet)
+[![codecov](https://codecov.io/gh/kouhin/react-safety-helmet/branch/master/graph/badge.svg)](https://codecov.io/gh/kouhin/react-safety-helmet)
+[![Build Status](https://travis-ci.org/kouhin/react-safety-helmet.svg?branch=master)](https://travis-ci.org/kouhin/react-safety-helmet)
 [![Dependency Status](https://img.shields.io/david/kouhin/react-safety-helmet.svg?style=flat-square)](https://david-dm.org/nfl/react-helmet)
 
 A fork of react-helmet that support for renderToNodeStream and thread safe with the power of redux
