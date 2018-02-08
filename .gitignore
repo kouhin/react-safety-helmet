@@ -1,6 +1,7 @@
 .DS_Store
 .eslintcache
 .idea
+.tern-port
 coverage
 es
 lib

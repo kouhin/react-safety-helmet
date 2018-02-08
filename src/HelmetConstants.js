@@ -1,3 +1,5 @@
+export const STORE_KEY = "helmet";
+
 export const ATTRIBUTE_NAMES = {
     BODY: "bodyAttributes",
     HTML: "htmlAttributes",

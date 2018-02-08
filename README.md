@@ -1,16 +1,15 @@
-<img align="right" width="200" src="http://static.nfl.com/static/content/public/static/img/logos/react-helmet.jpg" />
-
 # React Helmet
 
-[![npm Version](https://img.shields.io/npm/v/react-helmet.svg?style=flat-square)](https://www.npmjs.org/package/react-helmet)
-[![codecov.io](https://img.shields.io/codecov/c/github/nfl/react-helmet.svg?branch=master&style=flat-square)](https://codecov.io/github/nfl/react-helmet?branch=master)
-[![Build Status](https://img.shields.io/travis/nfl/react-helmet/master.svg?style=flat-square)](https://travis-ci.org/nfl/react-helmet)
-[![Dependency Status](https://img.shields.io/david/nfl/react-helmet.svg?style=flat-square)](https://david-dm.org/nfl/react-helmet)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md#pull-requests)
+[![npm Version](https://img.shields.io/npm/v/react-safety-helmet.svg?style=flat-square)](https://www.npmjs.org/package/react-helmet)
+[![Dependency Status](https://img.shields.io/david/kouhin/react-safety-helmet.svg?style=flat-square)](https://david-dm.org/nfl/react-helmet)
+
+A fork of react-helmet that support for renderToNodeStream and thread safe with the power of redux
 
 This reusable React component will manage all of your changes to the document head.
 
 Helmet _takes_ plain HTML tags and _outputs_ plain HTML tags. It's dead simple, and React beginner friendly.
+
+*This is a fork of [react-helmet](https://github.com/nfl/react-helmet).*
 
 ## Example
 ```javascript
@@ -36,19 +35,29 @@ class Application extends React.Component {
 Nested or latter components will override duplicate changes:
 
 ```javascript
-<Parent>
-    <Helmet>
-        <title>My Title</title>
-        <meta name="description" content="Helmet application" />
-    </Helmet>
+import ReactDOM from 'react-dom';
+import { HelmetProvider, createHelmetStore } from 'react-helmet';
 
-    <Child>
-        <Helmet>
-            <title>Nested Title</title>
-            <meta name="description" content="Nested component" />
-        </Helmet>
-    </Child>
-</Parent>
+function bootstrap() {
+    const helmetStore = createHelmetStore();
+    ReactDOM.render(
+        <HelmetProvider store={helmetStore}>
+            <Parent>
+                <Helmet>
+                    <title>My Title</title>
+                    <meta name="description" content="Helmet application" />
+                </Helmet>
+                <Child>
+                    <Helmet>
+                        <title>Nested Title</title>
+                        <meta name="description" content="Nested component" />
+                    </Helmet>
+                </Child>
+            </Parent>
+        </HelmetProvider>,
+        document.getElementById('app')
+    );
+}
 ```
 
 outputs:
@@ -87,13 +96,18 @@ npm install --save react-helmet
 ```
 
 ## Server Usage
-To use on the server, call `Helmet.renderStatic()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
-
-Because this component keeps track of mounted instances, **you have to make sure to call `renderStatic` on server**, or you'll get a memory leak.
+To use on the server, call `renderHelmetStatic()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
 
 ```javascript
-ReactDOMServer.renderToString(<Handler />);
-const helmet = Helmet.renderStatic();
+import { createHelmetStore, renderHelmetStatic, HelmetProvider } from 'react-helmet';
+
+const helmetStore = createHelmetStore();
+ReactDOMServer.renderToString(
+    <HelmetProvider store={helmetStore}
+        <Handler />
+    </HelmetProvider>
+);
+const helmet = renderHelmetStatic(store);
 ```
 
 This `helmet` instance contains the following properties:
@@ -150,8 +164,46 @@ function HTML () {
     );
 }
 ```
+## Server Usage with `ReactDOMServer.renderToNodeStream()` and `ReactDOMServer.renderToStaticNodeStream()`
 
-### Reference Guide
+``` javascript
+import stream from 'stream';
+
+class DrainWritable extends stream.Writable {
+    constructor(options) {
+        super(options);
+        this.buffer = '';
+    }
+
+    _write(chunk, encoding, cb) {
+        this.buffer += chunk;
+        cb();
+    }
+}
+
+new Promise((resolve, reject) => {
+    const writable = new DrainWritable();
+    const helmetStore = createHelmetStore();
+    ReactDOMServer.renderToNodeStream(
+        <HelmetProvider store={helmetStore}>
+          <App />
+        </HelmetProvider>,
+    ).pipe(writable);
+
+    writable.on('finish', () => {
+        const helmetObj = renderHelmetStatic(helmetStore);
+        resolve({
+            body: writable.buffer,
+            helmet,
+        });
+    });
+    writable.on('error', reject);
+}).then(({body, helmet}) => {
+    // Create html with body and helmet object
+});
+```
+
+## Reference Guide
 
 ```javascript
 <Helmet

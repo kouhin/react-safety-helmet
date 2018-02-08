@@ -1,5 +1,7 @@
 import React from "react";
 import objectAssign from "object-assign";
+import raf from "raf";
+
 import {
     ATTRIBUTE_NAMES,
     HELMET_ATTRIBUTE,
@@ -248,39 +250,6 @@ const reducePropsToState = propsList => ({
     )
 });
 
-const rafPolyfill = (() => {
-    let clock = Date.now();
-
-    return (callback: Function) => {
-        const currentTime = Date.now();
-
-        if (currentTime - clock > 16) {
-            clock = currentTime;
-            callback(currentTime);
-        } else {
-            setTimeout(() => {
-                rafPolyfill(callback);
-            }, 0);
-        }
-    };
-})();
-
-const cafPolyfill = (id: string | number) => clearTimeout(id);
-
-const requestAnimationFrame = typeof window !== "undefined"
-    ? window.requestAnimationFrame ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame ||
-          rafPolyfill
-    : global.requestAnimationFrame || rafPolyfill;
-
-const cancelAnimationFrame = typeof window !== "undefined"
-    ? window.cancelAnimationFrame ||
-          window.webkitCancelAnimationFrame ||
-          window.mozCancelAnimationFrame ||
-          cafPolyfill
-    : global.cancelAnimationFrame || cafPolyfill;
-
 const warn = msg => {
     return console && typeof console.warn === "function" && console.warn(msg);
 };
@@ -289,11 +258,11 @@ let _helmetCallback = null;
 
 const handleClientStateChange = newState => {
     if (_helmetCallback) {
-        cancelAnimationFrame(_helmetCallback);
+        raf.cancel(_helmetCallback);
     }
 
     if (newState.defer) {
-        _helmetCallback = requestAnimationFrame(() => {
+        _helmetCallback = raf(() => {
             commitTagChanges(newState, () => {
                 _helmetCallback = null;
             });
@@ -436,9 +405,10 @@ const updateTags = (type, tags) => {
                             );
                         }
                     } else {
-                        const value = typeof tag[attribute] === "undefined"
-                            ? ""
-                            : tag[attribute];
+                        const value =
+                            typeof tag[attribute] === "undefined"
+                                ? ""
+                                : tag[attribute];
                         newElement.setAttribute(attribute, value);
                     }
                 }
@@ -471,9 +441,10 @@ const updateTags = (type, tags) => {
 
 const generateElementAttributesAsString = attributes =>
     Object.keys(attributes).reduce((str, key) => {
-        const attr = typeof attributes[key] !== "undefined"
-            ? `${key}="${attributes[key]}"`
-            : `${key}`;
+        const attr =
+            typeof attributes[key] !== "undefined"
+                ? `${key}="${attributes[key]}"`
+                : `${key}`;
         return str ? `${str} ${attr}` : attr;
     }, "");
 
@@ -502,12 +473,13 @@ const generateTagsAsString = (type, tags, encode) =>
                     )
             )
             .reduce((string, attribute) => {
-                const attr = typeof tag[attribute] === "undefined"
-                    ? attribute
-                    : `${attribute}="${encodeSpecialCharacters(
-                          tag[attribute],
-                          encode
-                      )}"`;
+                const attr =
+                    typeof tag[attribute] === "undefined"
+                        ? attribute
+                        : `${attribute}="${encodeSpecialCharacters(
+                              tag[attribute],
+                              encode
+                          )}"`;
                 return string ? `${string} ${attr}` : attr;
             }, "");
 
@@ -515,9 +487,9 @@ const generateTagsAsString = (type, tags, encode) =>
 
         const isSelfClosing = SELF_CLOSING_TAGS.indexOf(type) === -1;
 
-        return `${str}<${type} ${HELMET_ATTRIBUTE}="true" ${attributeHtml}${isSelfClosing
-            ? `/>`
-            : `>${tagContent}</${type}>`}`;
+        return `${str}<${type} ${HELMET_ATTRIBUTE}="true" ${attributeHtml}${
+            isSelfClosing ? `/>` : `>${tagContent}</${type}>`
+        }`;
     }, "");
 
 const convertElementAttributestoReactProps = (attributes, initProps = {}) => {
@@ -638,5 +610,4 @@ export {convertReactPropstoHtmlAttributes};
 export {handleClientStateChange};
 export {mapStateOnServer};
 export {reducePropsToState};
-export {requestAnimationFrame};
 export {warn};

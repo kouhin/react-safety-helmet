@@ -5,9 +5,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactServer from "react-dom/server";
-import {Helmet} from "../src/Helmet";
+import raf from "raf";
+
+import Helmet from "../src/Helmet";
 import {HTML_TAG_MAP} from "../src/HelmetConstants";
-import {requestAnimationFrame} from "../src/HelmetUtils.js";
 
 const HELMET_ATTRIBUTE = "data-react-helmet";
 
@@ -38,7 +39,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Test Title");
 
                     done();
@@ -55,7 +56,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Title: Some Great Title");
 
                     done();
@@ -78,7 +79,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Child Two Title");
 
                     done();
@@ -98,7 +99,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Nested Title");
 
                     done();
@@ -116,7 +117,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Main Title");
 
                     done();
@@ -136,7 +137,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Fallback");
 
                     done();
@@ -156,7 +157,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal(
                         "This is a Test of the titleTemplate feature"
                     );
@@ -177,7 +178,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal(
                         "This is a Test of the titleTemplate feature. Another Test."
                     );
@@ -207,7 +208,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal(
                         "A Second Test using nested titleTemplate attributes"
                     );
@@ -233,7 +234,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal(
                         "This is a Second Test of the titleTemplate feature"
                     );
@@ -252,7 +253,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal(
                         "This is a te$t te$$t te$$$t te$$$$t"
                     );
@@ -271,7 +272,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal(chineseTitle);
 
                     done();
@@ -286,7 +287,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
                     expect(document.title).to.equal("Test Title with itemProp");
                     expect(titleTag.getAttribute("itemprop")).to.equal("name");
@@ -305,7 +306,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Existing Title");
 
                     done();
@@ -321,18 +322,18 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(document.title).to.equal("Existing Title");
 
                     ReactDOM.render(
                         <Helmet>
-                            <title>{" "}</title>
+                            <title />
                             <meta name="keywords" content="stuff" />
                         </Helmet>,
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         expect(document.title).to.equal("");
                         done();
                     });
@@ -353,7 +354,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
 
                     expect(titleTag.getAttribute("itemprop")).to.equal("name");
@@ -378,7 +379,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
 
                     expect(titleTag.getAttribute("lang")).to.equal("ja");
@@ -399,7 +400,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
 
                     expect(titleTag.getAttribute("hidden")).to.equal("true");
@@ -419,10 +420,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const titleTag = document.getElementsByTagName(
                             "title"
                         )[0];
@@ -448,7 +449,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const htmlTag = document.getElementsByTagName("html")[0];
 
                     expect(htmlTag.getAttribute("class")).to.equal(
@@ -476,7 +477,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const htmlTag = document.getElementsByTagName("html")[0];
 
                     expect(htmlTag.getAttribute("lang")).to.equal("ja");
@@ -496,7 +497,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const htmlTag = document.getElementsByTagName("html")[0];
 
                     expect(htmlTag.getAttribute("amp")).to.equal("true");
@@ -516,10 +517,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -543,7 +544,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(
                         <Helmet>
                             <html lang="ja" id="html-tag" title="html tag" />
@@ -551,7 +552,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -579,7 +580,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(
                         <Helmet>
                             <html id="html-tag" title="html tag" />
@@ -587,7 +588,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -616,7 +617,7 @@ describe("Helmet - Declarative API", () => {
                 it("are not cleared", done => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -638,7 +639,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -662,10 +663,10 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         ReactDOM.render(<Helmet />, container);
 
-                        requestAnimationFrame(() => {
+                        raf(() => {
                             const htmlTag = document.getElementsByTagName(
                                 "html"
                             )[0];
@@ -718,7 +719,7 @@ describe("Helmet - Declarative API", () => {
                             container
                         );
 
-                        requestAnimationFrame(() => {
+                        raf(() => {
                             const bodyTag = document.body;
 
                             const reactCompatAttr =
@@ -744,7 +745,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const bodyTag = document.body;
 
                     expect(bodyTag.getAttribute("class")).to.equal(
@@ -772,7 +773,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const bodyTag = document.body;
 
                     expect(bodyTag.getAttribute("lang")).to.equal("ja");
@@ -792,7 +793,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const bodyTag = document.body;
 
                     expect(bodyTag.getAttribute("hidden")).to.equal("true");
@@ -812,10 +813,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("lang")).to.be.null;
@@ -837,7 +838,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(
                         <Helmet>
                             <body lang="ja" id="body-tag" title="body tag" />
@@ -845,7 +846,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("hidden")).to.equal(null);
@@ -871,7 +872,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(
                         <Helmet>
                             <body id="body-tag" title="body tag" />
@@ -879,7 +880,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("hidden")).to.equal(null);
@@ -906,7 +907,7 @@ describe("Helmet - Declarative API", () => {
                 it("attributes are not cleared", done => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("test")).to.equal("test");
@@ -926,7 +927,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("test")).to.equal(
@@ -948,10 +949,10 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         ReactDOM.render(<Helmet />, container);
 
-                        requestAnimationFrame(() => {
+                        raf(() => {
                             const bodyTag = document.body;
 
                             expect(bodyTag.getAttribute("test")).to.equal(null);
@@ -988,7 +989,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(spy.called).to.equal(true);
                     const newState = spy.getCall(0).args[0];
                     const addedTags = spy.getCall(0).args[1];
@@ -1052,7 +1053,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(spy.callCount).to.equal(1);
                     expect(spy.getCall(0).args[0]).to.contain({
                         title: "Deeper Title"
@@ -1072,7 +1073,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1100,10 +1101,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const existingTags = headElement.querySelectorAll(
                             `base[${HELMET_ATTRIBUTE}]`
                         );
@@ -1124,7 +1125,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1149,7 +1150,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1161,8 +1162,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(1);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("href")).to.equal(
@@ -1184,7 +1185,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1209,7 +1210,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1249,10 +1250,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const existingTags = headElement.querySelectorAll(
                             `meta[${HELMET_ATTRIBUTE}]`
                         );
@@ -1273,7 +1274,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1306,7 +1307,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1320,8 +1321,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(3);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("charset")).to.equal("utf-8");
@@ -1329,8 +1330,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta charset="utf-8" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("name")).to.equal(
@@ -1343,8 +1344,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta name="description" content="Inner description" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[2]")
+                    expect(existingTags)
+                        .to.have.deep.property("[2]")
                         .that.is.an.instanceof(Element);
                     expect(thirdTag).to.have.property("getAttribute");
                     expect(thirdTag.getAttribute("name")).to.equal("keywords");
@@ -1371,7 +1372,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1383,8 +1384,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("name")).to.equal(
@@ -1397,8 +1398,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta name="description" content="Test description" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("name")).to.equal(
@@ -1438,7 +1439,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1449,8 +1450,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(1);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("name")).to.equal(
@@ -1490,7 +1491,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1502,8 +1503,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("name")).to.equal(
@@ -1516,8 +1517,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta name="description" content="Inner description" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("name")).to.equal(
@@ -1545,7 +1546,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1571,7 +1572,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1607,10 +1608,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const tagNodes = headElement.querySelectorAll(
                             `link[${HELMET_ATTRIBUTE}]`
                         );
@@ -1634,7 +1635,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1672,7 +1673,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1683,8 +1684,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(1);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -1722,7 +1723,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1734,8 +1735,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("href")).to.equal(
@@ -1748,8 +1749,8 @@ describe("Helmet - Declarative API", () => {
                         `<link href="http://localhost/style.css" rel="stylesheet" type="text/css" media="all" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("rel")).to.equal(
@@ -1799,7 +1800,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1812,8 +1813,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.at.least(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("href")).to.equal(
@@ -1826,8 +1827,8 @@ describe("Helmet - Declarative API", () => {
                         `<link href="http://localhost/style.css" rel="stylesheet" type="text/css" media="all" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("href")).to.equal(
@@ -1838,8 +1839,8 @@ describe("Helmet - Declarative API", () => {
                         `<link rel="canonical" href="http://localhost/helmet/innercomponent" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[2]")
+                    expect(existingTags)
+                        .to.have.deep.property("[2]")
                         .that.is.an.instanceof(Element);
                     expect(thirdTag).to.have.property("getAttribute");
                     expect(thirdTag.getAttribute("href")).to.equal(
@@ -1868,7 +1869,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1880,8 +1881,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.at.least(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -1892,8 +1893,8 @@ describe("Helmet - Declarative API", () => {
                         `<link rel="canonical" href="http://localhost/helmet" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("rel")).to.equal("canonical");
@@ -1931,7 +1932,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1942,8 +1943,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(1);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -1981,7 +1982,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1993,8 +1994,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -2005,8 +2006,8 @@ describe("Helmet - Declarative API", () => {
                         `<link rel="canonical" href="http://localhost/helmet/component" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("rel")).to.equal("canonical");
@@ -2033,7 +2034,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -2043,8 +2044,8 @@ describe("Helmet - Declarative API", () => {
                     expect(existingTags).to.not.equal(undefined);
                     expect(existingTags.length).to.be.equal(1);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -2086,7 +2087,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.getElementsByTagName(
                         "script"
                     );
@@ -2128,10 +2129,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const existingTags = headElement.querySelectorAll(
                             `script[${HELMET_ATTRIBUTE}]`
                         );
@@ -2152,7 +2153,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2181,7 +2182,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2193,8 +2194,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.at.least(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("src")).to.equal(
@@ -2207,8 +2208,8 @@ describe("Helmet - Declarative API", () => {
                         `<script src="http://localhost/test.js" type="text/javascript" ${HELMET_ATTRIBUTE}="true"></script>`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("src")).to.equal(
@@ -2233,14 +2234,14 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTag = headElement.querySelector(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
 
                     expect(existingTag).to.not.equal(undefined);
-                    expect(existingTag.outerHTML).to.be
-                        .a("string")
+                    expect(existingTag.outerHTML)
+                        .to.be.a("string")
                         .that.equals(
                             `<script src="foo.js" async="" ${HELMET_ATTRIBUTE}="true"></script>`
                         );
@@ -2257,7 +2258,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2276,7 +2277,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2298,7 +2299,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.getElementsByTagName(
                         "noscript"
                     );
@@ -2322,10 +2323,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const existingTags = headElement.querySelectorAll(
                             `script[${HELMET_ATTRIBUTE}]`
                         );
@@ -2346,7 +2347,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.querySelectorAll(
                         `noscript[${HELMET_ATTRIBUTE}]`
                     );
@@ -2366,7 +2367,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `noscript[${HELMET_ATTRIBUTE}]`
                     );
@@ -2399,7 +2400,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `style[${HELMET_ATTRIBUTE}]`
                     );
@@ -2409,8 +2410,8 @@ describe("Helmet - Declarative API", () => {
                     expect(existingTags).to.not.equal(undefined);
                     expect(existingTags.length).to.be.equal(2);
 
-                    expect(existingTags).to.have.deep
-                        .property("[0]")
+                    expect(existingTags)
+                        .to.have.deep.property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("type")).to.equal("text/css");
@@ -2419,8 +2420,8 @@ describe("Helmet - Declarative API", () => {
                         `<style type="text/css" ${HELMET_ATTRIBUTE}="true">${cssText1}</style>`
                     );
 
-                    expect(existingTags).to.have.deep
-                        .property("[1]")
+                    expect(existingTags)
+                        .to.have.deep.property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag.innerHTML).to.equal(cssText2);
                     expect(secondTag.outerHTML).to.equal(
@@ -2444,10 +2445,10 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     ReactDOM.render(<Helmet />, container);
 
-                    requestAnimationFrame(() => {
+                    raf(() => {
                         const existingTags = headElement.querySelectorAll(
                             `style[${HELMET_ATTRIBUTE}]`
                         );
@@ -2468,7 +2469,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const existingTags = headElement.querySelectorAll(
                         `style[${HELMET_ATTRIBUTE}]`
                     );
@@ -2488,7 +2489,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `style[${HELMET_ATTRIBUTE}]`
                     );
@@ -2514,14 +2515,10 @@ describe("Helmet - Declarative API", () => {
             ReactDOM.render(
                 <div>
                     <Helmet defer={false}>
-                        <script>
-                            window.__spy__(1)
-                        </script>
+                        <script>window.__spy__(1)</script>
                     </Helmet>
                     <Helmet>
-                        <script>
-                            window.__spy__(2)
-                        </script>
+                        <script>window.__spy__(2)</script>
                     </Helmet>
                 </div>,
                 container
@@ -2529,7 +2526,7 @@ describe("Helmet - Declarative API", () => {
 
             expect(window.__spy__.callCount).to.equal(1);
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(window.__spy__.callCount).to.equal(2);
                 expect(window.__spy__.args).to.deep.equal([[1], [2]]);
                 done();
@@ -2634,22 +2631,22 @@ describe("Helmet - Declarative API", () => {
 
             const titleComponent = head.title.toComponent();
 
-            expect(titleComponent).to.be.an("array").that.has.length.of(1);
+            expect(titleComponent)
+                .to.be.an("array")
+                .that.has.length.of(1);
 
             titleComponent.forEach(title => {
-                expect(title).to.be
-                    .an("object")
+                expect(title)
+                    .to.be.an("object")
                     .that.contains.property("type", "title");
             });
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {titleComponent}
-                </div>
+                <div>{titleComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedTitle}</div>`);
         });
 
@@ -2668,22 +2665,22 @@ describe("Helmet - Declarative API", () => {
 
             const titleComponent = head.title.toComponent();
 
-            expect(titleComponent).to.be.an("array").that.has.length.of(1);
+            expect(titleComponent)
+                .to.be.an("array")
+                .that.has.length.of(1);
 
             titleComponent.forEach(title => {
-                expect(title).to.be
-                    .an("object")
+                expect(title)
+                    .to.be.an("object")
                     .that.contains.property("type", "title");
             });
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {titleComponent}
-                </div>
+                <div>{titleComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedTitleWithItemprop}</div>`);
         });
 
@@ -2702,22 +2699,22 @@ describe("Helmet - Declarative API", () => {
 
             const baseComponent = head.base.toComponent();
 
-            expect(baseComponent).to.be.an("array").that.has.length.of(1);
+            expect(baseComponent)
+                .to.be.an("array")
+                .that.has.length.of(1);
 
             baseComponent.forEach(base => {
-                expect(base).to.be
-                    .an("object")
+                expect(base)
+                    .to.be.an("object")
                     .that.contains.property("type", "base");
             });
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {baseComponent}
-                </div>
+                <div>{baseComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedBaseTag}</div>`);
         });
 
@@ -2745,22 +2742,22 @@ describe("Helmet - Declarative API", () => {
 
             const metaComponent = head.meta.toComponent();
 
-            expect(metaComponent).to.be.an("array").that.has.length.of(5);
+            expect(metaComponent)
+                .to.be.an("array")
+                .that.has.length.of(5);
 
             metaComponent.forEach(meta => {
-                expect(meta).to.be
-                    .an("object")
+                expect(meta)
+                    .to.be.an("object")
                     .that.contains.property("type", "meta");
             });
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {metaComponent}
-                </div>
+                <div>{metaComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedMetaTags}</div>`);
         });
 
@@ -2784,22 +2781,22 @@ describe("Helmet - Declarative API", () => {
 
             const linkComponent = head.link.toComponent();
 
-            expect(linkComponent).to.be.an("array").that.has.length.of(2);
+            expect(linkComponent)
+                .to.be.an("array")
+                .that.has.length.of(2);
 
             linkComponent.forEach(link => {
-                expect(link).to.be
-                    .an("object")
+                expect(link)
+                    .to.be.an("object")
                     .that.contains.property("type", "link");
             });
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {linkComponent}
-                </div>
+                <div>{linkComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedLinkTags}</div>`);
         });
 
@@ -2825,22 +2822,22 @@ describe("Helmet - Declarative API", () => {
 
             const scriptComponent = head.script.toComponent();
 
-            expect(scriptComponent).to.be.an("array").that.has.length.of(2);
+            expect(scriptComponent)
+                .to.be.an("array")
+                .that.has.length.of(2);
 
             scriptComponent.forEach(script => {
-                expect(script).to.be
-                    .an("object")
+                expect(script)
+                    .to.be.an("object")
                     .that.contains.property("type", "script");
             });
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {scriptComponent}
-                </div>
+                <div>{scriptComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedScriptTags}</div>`);
         });
 
@@ -2860,22 +2857,22 @@ describe("Helmet - Declarative API", () => {
 
             const noscriptComponent = head.noscript.toComponent();
 
-            expect(noscriptComponent).to.be.an("array").that.has.length.of(2);
+            expect(noscriptComponent)
+                .to.be.an("array")
+                .that.has.length.of(2);
 
             noscriptComponent.forEach(noscript => {
-                expect(noscript).to.be
-                    .an("object")
+                expect(noscript)
+                    .to.be.an("object")
                     .that.contains.property("type", "noscript");
             });
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {noscriptComponent}
-                </div>
+                <div>{noscriptComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedNoscriptTags}</div>`);
         });
 
@@ -2895,16 +2892,16 @@ describe("Helmet - Declarative API", () => {
 
             const styleComponent = head.style.toComponent();
 
-            expect(styleComponent).to.be.an("array").that.has.length.of(2);
+            expect(styleComponent)
+                .to.be.an("array")
+                .that.has.length.of(2);
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {styleComponent}
-                </div>
+                <div>{styleComponent}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<div>${stringifiedStyleTags}</div>`);
         });
 
@@ -2921,8 +2918,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
-            expect(head.title.toString()).to.be
-                .a("string")
+            expect(head.title.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedTitle);
         });
 
@@ -2941,9 +2938,9 @@ describe("Helmet - Declarative API", () => {
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
-            requestAnimationFrame(() => {
-                expect(head.title.toString()).to.be
-                    .a("string")
+            raf(() => {
+                expect(head.title.toString())
+                    .to.be.a("string")
                     .that.equals(stringifiedTitleWithTitleExpression);
 
                 done();
@@ -2964,8 +2961,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.title).to.respondTo("toString");
 
             const titleString = head.title.toString();
-            expect(titleString).to.be
-                .a("string")
+            expect(titleString)
+                .to.be.a("string")
                 .that.equals(stringifiedTitleWithItemprop);
         });
 
@@ -2982,8 +2979,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.base).to.exist;
             expect(head.base).to.respondTo("toString");
 
-            expect(head.base.toString()).to.be
-                .a("string")
+            expect(head.base.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedBaseTag);
         });
 
@@ -3007,8 +3004,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toString");
 
-            expect(head.meta.toString()).to.be
-                .a("string")
+            expect(head.meta.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedMetaTags);
         });
 
@@ -3030,8 +3027,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.link).to.exist;
             expect(head.link).to.respondTo("toString");
 
-            expect(head.link.toString()).to.be
-                .a("string")
+            expect(head.link.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedLinkTags);
         });
 
@@ -3055,8 +3052,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.script).to.exist;
             expect(head.script).to.respondTo("toString");
 
-            expect(head.script.toString()).to.be
-                .a("string")
+            expect(head.script.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedScriptTags);
         });
 
@@ -3074,8 +3071,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.style).to.exist;
             expect(head.style).to.respondTo("toString");
 
-            expect(head.style.toString()).to.be
-                .a("string")
+            expect(head.style.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedStyleTags);
         });
 
@@ -3096,8 +3093,8 @@ describe("Helmet - Declarative API", () => {
                 <html lang="en" {...attrs} />
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<html ${stringifiedHtmlAttributes}></html>`);
         });
 
@@ -3114,8 +3111,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.htmlAttributes).to.exist;
             expect(head.htmlAttributes).to.respondTo("toString");
 
-            expect(head.htmlAttributes.toString()).to.be
-                .a("string")
+            expect(head.htmlAttributes.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedHtmlAttributes);
         });
 
@@ -3136,8 +3133,8 @@ describe("Helmet - Declarative API", () => {
                 <body lang="en" {...attrs} />
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(`<body ${stringifiedBodyAttributes}></body>`);
         });
 
@@ -3154,8 +3151,8 @@ describe("Helmet - Declarative API", () => {
             expect(body.bodyAttributes).to.exist;
             expect(body.bodyAttributes).to.respondTo("toString");
 
-            expect(body.bodyAttributes.toString()).to.be
-                .a("string")
+            expect(body.bodyAttributes.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedBodyAttributes);
         });
 
@@ -3177,8 +3174,8 @@ describe("Helmet - Declarative API", () => {
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
-            expect(head.title.toString()).to.be
-                .a("string")
+            expect(head.title.toString())
+                .to.be.a("string")
                 .that.equals(stringifiedChineseTitle);
         });
 
@@ -3202,13 +3199,11 @@ describe("Helmet - Declarative API", () => {
             expect(head.title).to.respondTo("toComponent");
 
             const markup = ReactServer.renderToStaticMarkup(
-                <div>
-                    {head.title.toComponent()}
-                </div>
+                <div>{head.title.toComponent()}</div>
             );
 
-            expect(markup).to.be
-                .a("string")
+            expect(markup)
+                .to.be.a("string")
                 .that.equals(
                     `<div><title ${HELMET_ATTRIBUTE}="true"></title></div>`
                 );
@@ -3261,8 +3256,8 @@ describe("Helmet - Declarative API", () => {
             const {script} = Helmet.rewind();
             const stringifiedScriptTag = script.toString();
 
-            expect(stringifiedScriptTag).to.be
-                .a("string")
+            expect(stringifiedScriptTag)
+                .to.be.a("string")
                 .that.equals(
                     `<script ${HELMET_ATTRIBUTE}="true" src="foo.js" async></script>`
                 );
@@ -3300,22 +3295,22 @@ describe("Helmet - Declarative API", () => {
 
                 const titleComponent = head.title.toComponent();
 
-                expect(titleComponent).to.be.an("array").that.has.length.of(1);
+                expect(titleComponent)
+                    .to.be.an("array")
+                    .that.has.length.of(1);
 
                 titleComponent.forEach(title => {
-                    expect(title).to.be
-                        .an("object")
+                    expect(title)
+                        .to.be.an("object")
                         .that.contains.property("type", "title");
                 });
 
                 const markup = ReactServer.renderToStaticMarkup(
-                    <div>
-                        {titleComponent}
-                    </div>
+                    <div>{titleComponent}</div>
                 );
 
-                expect(markup).to.be
-                    .a("string")
+                expect(markup)
+                    .to.be.a("string")
                     .that.equals(`<div>${stringifiedTitle}</div>`);
             });
         });
@@ -3347,7 +3342,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(Helmet.peek().title).to.be.equal("Fancy title");
                 Helmet.canUseDOM = false;
                 expect(Helmet.peek().title).to.be.equal("Fancy title");
@@ -3368,7 +3363,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 const existingTags = headElement.querySelectorAll(
                     `meta[${HELMET_ATTRIBUTE}]`
                 );
@@ -3378,8 +3373,8 @@ describe("Helmet - Declarative API", () => {
 
                 expect(existingTags.length).to.be.equal(1);
 
-                expect(existingTags).to.have.deep
-                    .property("[0]")
+                expect(existingTags)
+                    .to.have.deep.property("[0]")
                     .that.is.an.instanceof(Element);
                 expect(existingTag).to.have.property("getAttribute");
                 expect(existingTag.getAttribute("name")).to.equal(
@@ -3406,7 +3401,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 // Re-rendering will pass new props to an already mounted Helmet
                 ReactDOM.render(
                     <Helmet onChangeClientState={spy}>
@@ -3416,7 +3411,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(spy.callCount).to.equal(1);
 
                     done();
@@ -3438,7 +3433,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(spy.called).to.equal(true);
 
                 const [, addedTags, removedTags] = spy.getCall(0).args;
@@ -3466,7 +3461,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(spy.called).to.equal(true);
                 addedTags = spy.getCall(0).args[1];
                 removedTags = spy.getCall(0).args[2];
@@ -3501,7 +3496,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                requestAnimationFrame(() => {
+                raf(() => {
                     expect(spy.callCount).to.equal(2);
                     addedTags = spy.getCall(1).args[1];
                     removedTags = spy.getCall(1).args[2];
@@ -3541,7 +3536,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(document.title).to.equal("Test Title");
                 expect(warn.called).to.be.true;
 
@@ -3569,7 +3564,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(document.title).to.equal("Test Title");
                 expect(warn.called).to.be.true;
 
@@ -3594,7 +3589,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(document.title).to.equal("Test Title");
                 expect(warn.called).to.be.true;
 
@@ -3656,7 +3651,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 expect(document.title).to.equal("Test Title");
 
                 done();
@@ -3671,7 +3666,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            requestAnimationFrame(() => {
+            raf(() => {
                 const existingTags = headElement.querySelectorAll(
                     `meta[${HELMET_ATTRIBUTE}]`
                 );
@@ -3681,8 +3676,8 @@ describe("Helmet - Declarative API", () => {
 
                 expect(existingTags.length).to.be.equal(1);
 
-                expect(existingTags).to.have.deep
-                    .property("[0]")
+                expect(existingTags)
+                    .to.have.deep.property("[0]")
                     .that.is.an.instanceof(Element);
                 expect(existingTag).to.have.property("getAttribute");
                 expect(existingTag.getAttribute("name")).to.equal(
@@ -3699,8 +3694,8 @@ describe("Helmet - Declarative API", () => {
             });
         });
 
-        it("requestAnimationFrame works as expected", done => {
-            requestAnimationFrame(cb => {
+        it("raf works as expected", done => {
+            raf(cb => {
                 expect(cb).to.exist;
                 expect(cb).to.be.a("number");
 
