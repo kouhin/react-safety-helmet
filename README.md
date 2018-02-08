@@ -302,6 +302,41 @@ new Promise((resolve, reject) => {
 </Helmet>
 ```
 
+### Where is `Helmet.rewind()`, `Helmet.renderStatic()` and `peek()` ?
+
+#### Use renderHelmetStatic(store) instead of Helmet.rewind()
+
+``` javascript
+const helmetStore = createHelmetStore();
+ReactDOMServer.renderToString(
+    <HelmetProvider store={helmetStore}>
+        <Helmet>
+            <title>My Title</title>
+            <meta name="description" content="Helmet application" />
+        </Helmet>
+    </HelmetProvider>
+);
+
+const head = renderHelmetStatic(helmetStore);
+```
+
+#### Use peekHelmetState(storeState) instead of Helmet.peek()
+
+``` javascript
+const store = createHelmetStore();
+ReactDOM.render(
+    <HelmetProvider store={store}>
+        <Helmet>
+            <title>Fancy title</title>
+        </Helmet>
+    </HelmetProvider>,
+    container
+);
+
+peekHelmetState(store.getState()).title; // "Fancy title"
+```
+
+
 ## Contributing to this project
 Please take a moment to review the [guidelines for contributing](CONTRIBUTING.md).
 
