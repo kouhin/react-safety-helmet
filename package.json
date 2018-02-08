@@ -1,16 +1,19 @@
 {
-  "name": "react-helmet",
-  "description": "A document head manager for React",
+  "name": "react-safety-helmet",
+  "description": "A fork of react-helmet that support for renderToNodeStream and thread safe with the power of redux",
   "version": "5.2.0",
   "main": "./lib/index.js",
-  "author": "NFL <engineers@nfl.com>",
+  "author": [
+    "Bin Hou <houbin217jz@gmail.com> (https://github.com/kouhin)",
+    "NFL <engineers@nfl.com>"
+  ],
   "contributors": [
     "Chris Welch <chris.welch@nfl.com>"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nfl/react-helmet"
+    "url": "https://github.com/kouhin/react-safety-helmet"
   },
   "keywords": [
     "react-helmet",
