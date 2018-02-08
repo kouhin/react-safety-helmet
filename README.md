@@ -304,7 +304,7 @@ new Promise((resolve, reject) => {
 
 ### Where is `Helmet.rewind()`, `Helmet.renderStatic()` and `peek()` ?
 
-#### Use renderHelmetStatic(store) instead of Helmet.rewind()
+#### Use renderHelmetStatic(store) instead of Helmet.rewind() and Helmet.renderStatic()
 
 ``` javascript
 const helmetStore = createHelmetStore();
