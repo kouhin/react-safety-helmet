@@ -1,4 +1,6 @@
-# React Helmet
+<img align="right" width="200" src="https://user-images.githubusercontent.com/5006663/35962393-92074748-0cf4-11e8-9fc9-310671ceeeef.png" />
+
+# React Safety Helmet
 
 [![npm Version](https://img.shields.io/npm/v/react-safety-helmet.svg?style=flat-square)](https://www.npmjs.org/package/react-helmet)
 [![Dependency Status](https://img.shields.io/david/kouhin/react-safety-helmet.svg?style=flat-square)](https://david-dm.org/nfl/react-helmet)
@@ -14,7 +16,7 @@ Helmet _takes_ plain HTML tags and _outputs_ plain HTML tags. It's dead simple, 
 ## Example
 ```javascript
 import React from "react";
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-safety-helmet";
 
 class Application extends React.Component {
   render () {
@@ -36,7 +38,7 @@ Nested or latter components will override duplicate changes:
 
 ```javascript
 import ReactDOM from 'react-dom';
-import { HelmetProvider, createHelmetStore } from 'react-helmet';
+import { HelmetProvider, createHelmetStore } from 'react-safety-helmet';
 
 function bootstrap() {
     const helmetStore = createHelmetStore();
@@ -87,19 +89,19 @@ Helmet 5 is fully backward-compatible with previous Helmet releases, so you can 
 
 Yarn:
 ```bash
-yarn add react-helmet
+yarn add react-safety-helmet
 ```
 
 npm:
 ```bash
-npm install --save react-helmet
+npm install --save react-safety-helmet
 ```
 
 ## Server Usage
 To use on the server, call `renderHelmetStatic()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
 
 ```javascript
-import { createHelmetStore, renderHelmetStatic, HelmetProvider } from 'react-helmet';
+import { createHelmetStore, renderHelmetStatic, HelmetProvider } from 'react-safety-helmet';
 
 const helmetStore = createHelmetStore();
 ReactDOMServer.renderToString(
@@ -307,5 +309,3 @@ Please take a moment to review the [guidelines for contributing](CONTRIBUTING.md
 ## License
 
 MIT
-
-<img align="left" height="200" src="http://static.nfl.com/static/content/public/static/img/logos/nfl-engineering-light.svg" />
