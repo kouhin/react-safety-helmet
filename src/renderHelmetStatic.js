@@ -1,7 +1,7 @@
-import {reducePropsToState, mapStateOnServer} from "./HelmetUtils";
+import {mapStateOnServer} from "./HelmetUtils";
+import peekHelmetState from "./peekHelmetState";
 
 export default function renderStatic(store) {
-    const props = store.getState().values;
-    const state = reducePropsToState(props);
+    const state = peekHelmetState(store.getState());
     return mapStateOnServer(state);
 }

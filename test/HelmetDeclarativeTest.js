@@ -7,7 +7,13 @@ import ReactDOM from "react-dom";
 import ReactServer from "react-dom/server";
 import raf from "raf";
 
-import Helmet from "../src/Helmet";
+import {
+    Helmet,
+    HelmetProvider,
+    createHelmetStore,
+    renderHelmetStatic,
+    peekHelmetState
+} from "../src";
 import {HTML_TAG_MAP} from "../src/HelmetConstants";
 
 const HELMET_ATTRIBUTE = "data-react-helmet";
@@ -33,9 +39,11 @@ describe("Helmet - Declarative API", () => {
         describe("title", () => {
             it("updates page title", done => {
                 ReactDOM.render(
-                    <Helmet defaultTitle={"Fallback"}>
-                        <title>Test Title</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet defaultTitle={"Fallback"}>
+                            <title>Test Title</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -50,9 +58,11 @@ describe("Helmet - Declarative API", () => {
                 const someValue = "Some Great Title";
 
                 ReactDOM.render(
-                    <Helmet>
-                        <title>Title: {someValue}</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title>Title: {someValue}</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -65,17 +75,19 @@ describe("Helmet - Declarative API", () => {
 
             it("updates page title with multiple children", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <title>Test Title</title>
-                        </Helmet>
-                        <Helmet>
-                            <title>Child One Title</title>
-                        </Helmet>
-                        <Helmet>
-                            <title>Child Two Title</title>
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <title>Test Title</title>
+                            </Helmet>
+                            <Helmet>
+                                <title>Child One Title</title>
+                            </Helmet>
+                            <Helmet>
+                                <title>Child Two Title</title>
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -88,14 +100,16 @@ describe("Helmet - Declarative API", () => {
 
             it("sets title based on deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <title>Main Title</title>
-                        </Helmet>
-                        <Helmet>
-                            <title>Nested Title</title>
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <title>Main Title</title>
+                            </Helmet>
+                            <Helmet>
+                                <title>Nested Title</title>
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -108,12 +122,14 @@ describe("Helmet - Declarative API", () => {
 
             it("sets title using deepest nested component with a defined title", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <title>Main Title</title>
-                        </Helmet>
-                        <Helmet />
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <title>Main Title</title>
+                            </Helmet>
+                            <Helmet />
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -126,14 +142,16 @@ describe("Helmet - Declarative API", () => {
 
             it("uses defaultTitle if no title is defined", done => {
                 ReactDOM.render(
-                    <Helmet
-                        defaultTitle={"Fallback"}
-                        titleTemplate={
-                            "This is a %s of the titleTemplate feature"
-                        }
-                    >
-                        <title />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet
+                            defaultTitle={"Fallback"}
+                            titleTemplate={
+                                "This is a %s of the titleTemplate feature"
+                            }
+                        >
+                            <title />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -146,14 +164,16 @@ describe("Helmet - Declarative API", () => {
 
             it("uses a titleTemplate if defined", done => {
                 ReactDOM.render(
-                    <Helmet
-                        defaultTitle={"Fallback"}
-                        titleTemplate={
-                            "This is a %s of the titleTemplate feature"
-                        }
-                    >
-                        <title>Test</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet
+                            defaultTitle={"Fallback"}
+                            titleTemplate={
+                                "This is a %s of the titleTemplate feature"
+                            }
+                        >
+                            <title>Test</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -168,13 +188,15 @@ describe("Helmet - Declarative API", () => {
 
             it("replaces multiple title strings in titleTemplate", done => {
                 ReactDOM.render(
-                    <Helmet
-                        titleTemplate={
-                            "This is a %s of the titleTemplate feature. Another %s."
-                        }
-                    >
-                        <title>Test</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet
+                            titleTemplate={
+                                "This is a %s of the titleTemplate feature. Another %s."
+                            }
+                        >
+                            <title>Test</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -189,22 +211,24 @@ describe("Helmet - Declarative API", () => {
 
             it("uses a titleTemplate based on deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet
-                            titleTemplate={
-                                "This is a %s of the titleTemplate feature"
-                            }
-                        >
-                            <title>Test</title>
-                        </Helmet>
-                        <Helmet
-                            titleTemplate={
-                                "A %s using nested titleTemplate attributes"
-                            }
-                        >
-                            <title>Second Test</title>
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet
+                                titleTemplate={
+                                    "This is a %s of the titleTemplate feature"
+                                }
+                            >
+                                <title>Test</title>
+                            </Helmet>
+                            <Helmet
+                                titleTemplate={
+                                    "A %s using nested titleTemplate attributes"
+                                }
+                            >
+                                <title>Second Test</title>
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -219,18 +243,20 @@ describe("Helmet - Declarative API", () => {
 
             it("merges deepest component title with nearest upstream titleTemplate", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet
-                            titleTemplate={
-                                "This is a %s of the titleTemplate feature"
-                            }
-                        >
-                            <title>Test</title>
-                        </Helmet>
-                        <Helmet>
-                            <title>Second Test</title>
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet
+                                titleTemplate={
+                                    "This is a %s of the titleTemplate feature"
+                                }
+                            >
+                                <title>Test</title>
+                            </Helmet>
+                            <Helmet>
+                                <title>Second Test</title>
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -247,9 +273,11 @@ describe("Helmet - Declarative API", () => {
                 const dollarTitle = "te$t te$$t te$$$t te$$$$t";
 
                 ReactDOM.render(
-                    <Helmet titleTemplate={"This is a %s"}>
-                        <title>{dollarTitle}</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet titleTemplate={"This is a %s"}>
+                            <title>{dollarTitle}</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -266,9 +294,11 @@ describe("Helmet - Declarative API", () => {
                 const chineseTitle = "膣膗 鍆錌雔";
 
                 ReactDOM.render(
-                    <Helmet>
-                        <title>{chineseTitle}</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title>{chineseTitle}</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -281,9 +311,13 @@ describe("Helmet - Declarative API", () => {
 
             it("page title with prop itemProp", done => {
                 ReactDOM.render(
-                    <Helmet defaultTitle={"Fallback"}>
-                        <title itemProp="name">Test Title with itemProp</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet defaultTitle={"Fallback"}>
+                            <title itemProp="name">
+                                Test Title with itemProp
+                            </title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -300,9 +334,11 @@ describe("Helmet - Declarative API", () => {
                 headElement.innerHTML = `<title>Existing Title</title>`;
 
                 ReactDOM.render(
-                    <Helmet>
-                        <meta name="keywords" content="stuff" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <meta name="keywords" content="stuff" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -315,10 +351,12 @@ describe("Helmet - Declarative API", () => {
 
             it.skip("clears title tag if empty title is defined", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <title>Existing Title</title>
-                        <meta name="keywords" content="stuff" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title>Existing Title</title>
+                            <meta name="keywords" content="stuff" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -326,10 +364,12 @@ describe("Helmet - Declarative API", () => {
                     expect(document.title).to.equal("Existing Title");
 
                     ReactDOM.render(
-                        <Helmet>
-                            <title />
-                            <meta name="keywords" content="stuff" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <title />
+                                <meta name="keywords" content="stuff" />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -348,9 +388,11 @@ describe("Helmet - Declarative API", () => {
 
             it("updates title attributes", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <title itemProp="name" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title itemProp="name" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -368,14 +410,16 @@ describe("Helmet - Declarative API", () => {
 
             it("sets attributes based on the deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <title lang="en" hidden />
-                        </Helmet>
-                        <Helmet>
-                            <title lang="ja" />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <title lang="en" hidden />
+                            </Helmet>
+                            <Helmet>
+                                <title lang="ja" />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -394,9 +438,11 @@ describe("Helmet - Declarative API", () => {
 
             it("handles valueless attributes", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <title hidden />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title hidden />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -414,9 +460,11 @@ describe("Helmet - Declarative API", () => {
 
             it("clears title attributes that are handled within helmet", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <title lang="en" hidden />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title lang="en" hidden />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -443,9 +491,11 @@ describe("Helmet - Declarative API", () => {
         describe("html attributes", () => {
             it("updates html attributes", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <html className="myClassName" lang="en" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <html className="myClassName" lang="en" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -466,14 +516,16 @@ describe("Helmet - Declarative API", () => {
 
             it("sets attributes based on the deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <html lang="en" />
-                        </Helmet>
-                        <Helmet>
-                            <html lang="ja" />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <html lang="en" />
+                            </Helmet>
+                            <Helmet>
+                                <html lang="ja" />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -491,9 +543,11 @@ describe("Helmet - Declarative API", () => {
 
             it("handles valueless attributes", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <html amp />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <html amp />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -511,14 +565,21 @@ describe("Helmet - Declarative API", () => {
 
             it("clears html attributes that are handled within helmet", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <html lang="en" amp />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <html lang="en" amp />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const htmlTag = document.getElementsByTagName(
@@ -538,17 +599,25 @@ describe("Helmet - Declarative API", () => {
 
             it("updates with multiple additions and removals - overwrite and new", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <html lang="en" amp />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <html lang="en" amp />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
                     ReactDOM.render(
-                        <Helmet>
-                            <html lang="ja" id="html-tag" title="html tag" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <html
+                                    lang="ja"
+                                    id="html-tag"
+                                    title="html tag"
+                                />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -574,17 +643,21 @@ describe("Helmet - Declarative API", () => {
 
             it("updates with multiple additions and removals - all new", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <html lang="en" amp />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <html lang="en" amp />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
                     ReactDOM.render(
-                        <Helmet>
-                            <html id="html-tag" title="html tag" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <html id="html-tag" title="html tag" />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -615,7 +688,12 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("are not cleared", done => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const htmlTag = document.getElementsByTagName(
@@ -633,9 +711,11 @@ describe("Helmet - Declarative API", () => {
 
                 it("overwritten if specified in helmet", done => {
                     ReactDOM.render(
-                        <Helmet>
-                            <html test="helmet-attr" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <html test="helmet-attr" />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -657,9 +737,11 @@ describe("Helmet - Declarative API", () => {
 
                 it("cleared once it is managed in helmet", done => {
                     ReactDOM.render(
-                        <Helmet>
-                            <html test="helmet-attr" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <html test="helmet-attr" />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -713,9 +795,11 @@ describe("Helmet - Declarative API", () => {
                         };
 
                         ReactDOM.render(
-                            <Helmet>
-                                <body {...attr} />
-                            </Helmet>,
+                            <HelmetProvider store={createHelmetStore()}>
+                                <Helmet>
+                                    <body {...attr} />
+                                </Helmet>
+                            </HelmetProvider>,
                             container
                         );
 
@@ -739,9 +823,11 @@ describe("Helmet - Declarative API", () => {
 
             it("updates multiple body attributes", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <body className="myClassName" tabIndex={-1} />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <body className="myClassName" tabIndex={-1} />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -762,14 +848,16 @@ describe("Helmet - Declarative API", () => {
 
             it("sets attributes based on the deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <body lang="en" />
-                        </Helmet>
-                        <Helmet>
-                            <body lang="ja" />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <body lang="en" />
+                            </Helmet>
+                            <Helmet>
+                                <body lang="ja" />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -787,9 +875,11 @@ describe("Helmet - Declarative API", () => {
 
             it("handles valueless attributes", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <body hidden />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <body hidden />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -807,9 +897,11 @@ describe("Helmet - Declarative API", () => {
 
             it("clears body attributes that are handled within helmet", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <body lang="en" hidden />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <body lang="en" hidden />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -832,17 +924,25 @@ describe("Helmet - Declarative API", () => {
 
             it("updates with multiple additions and removals - overwrite and new", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <body lang="en" hidden />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <body lang="en" hidden />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
                     ReactDOM.render(
-                        <Helmet>
-                            <body lang="ja" id="body-tag" title="body tag" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <body
+                                    lang="ja"
+                                    id="body-tag"
+                                    title="body tag"
+                                />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -866,17 +966,21 @@ describe("Helmet - Declarative API", () => {
 
             it("updates with multiple additions and removals - all new", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <body lang="en" hidden />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <body lang="en" hidden />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
                     ReactDOM.render(
-                        <Helmet>
-                            <body id="body-tag" title="body tag" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <body id="body-tag" title="body tag" />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -905,7 +1009,12 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("attributes are not cleared", done => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const bodyTag = document.body;
@@ -921,9 +1030,11 @@ describe("Helmet - Declarative API", () => {
 
                 it("attributes are overwritten if specified in helmet", done => {
                     ReactDOM.render(
-                        <Helmet>
-                            <body test="helmet-attr" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <body test="helmet-attr" />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -943,9 +1054,11 @@ describe("Helmet - Declarative API", () => {
 
                 it("attributes are cleared once managed in helmet", done => {
                     ReactDOM.render(
-                        <Helmet>
-                            <body test="helmet-attr" />
-                        </Helmet>,
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet>
+                                <body test="helmet-attr" />
+                            </Helmet>
+                        </HelmetProvider>,
                         container
                     );
 
@@ -971,21 +1084,23 @@ describe("Helmet - Declarative API", () => {
             it("when handling client state change, calls the function with new state, addedTags and removedTags ", done => {
                 const spy = sinon.spy();
                 ReactDOM.render(
-                    <div>
-                        <Helmet onChangeClientState={spy}>
-                            <base href="http://mysite.com/" />
-                            <link
-                                href="http://localhost/helmet"
-                                rel="canonical"
-                            />
-                            <meta charSet="utf-8" />
-                            <script
-                                src="http://localhost/test.js"
-                                type="text/javascript"
-                            />
-                            <title>Main Title</title>
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet onChangeClientState={spy}>
+                                <base href="http://mysite.com/" />
+                                <link
+                                    href="http://localhost/helmet"
+                                    rel="canonical"
+                                />
+                                <meta charSet="utf-8" />
+                                <script
+                                    src="http://localhost/test.js"
+                                    type="text/javascript"
+                                />
+                                <title>Main Title</title>
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1042,14 +1157,16 @@ describe("Helmet - Declarative API", () => {
             it("calls the deepest defined callback with the deepest state", done => {
                 const spy = sinon.spy();
                 ReactDOM.render(
-                    <div>
-                        <Helmet onChangeClientState={spy}>
-                            <title>Main Title</title>
-                        </Helmet>
-                        <Helmet>
-                            <title>Deeper Title</title>
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet onChangeClientState={spy}>
+                                <title>Main Title</title>
+                            </Helmet>
+                            <Helmet>
+                                <title>Deeper Title</title>
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1067,9 +1184,11 @@ describe("Helmet - Declarative API", () => {
         describe("base tag", () => {
             it("updates base tag", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <base href="http://mysite.com/" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <base href="http://mysite.com/" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1097,12 +1216,19 @@ describe("Helmet - Declarative API", () => {
 
             it("clears the base tag if one is not specified", done => {
                 ReactDOM.render(
-                    <Helmet base={{href: "http://mysite.com/"}} />,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet base={{href: "http://mysite.com/"}} />
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const existingTags = headElement.querySelectorAll(
@@ -1119,9 +1245,11 @@ describe("Helmet - Declarative API", () => {
 
             it("tags without 'href' are not accepted", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <base property="won't work" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <base property="won't work" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1139,14 +1267,16 @@ describe("Helmet - Declarative API", () => {
 
             it("sets base tag based on deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <base href="http://mysite.com" />
-                        </Helmet>
-                        <Helmet>
-                            <base href="http://mysite.com/public" />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <base href="http://mysite.com" />
+                            </Helmet>
+                            <Helmet>
+                                <base href="http://mysite.com/public" />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1179,9 +1309,11 @@ describe("Helmet - Declarative API", () => {
 
             it("does not render tag when primary attribute is null", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <base href={undefined} />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <base href={undefined} />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1200,13 +1332,24 @@ describe("Helmet - Declarative API", () => {
         describe("meta tags", () => {
             it("updates meta tags", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <meta charSet="utf-8" />
-                        <meta name="description" content="Test description" />
-                        <meta httpEquiv="content-type" content="text/html" />
-                        <meta property="og:type" content="article" />
-                        <meta itemProp="name" content="Test name itemprop" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <meta charSet="utf-8" />
+                            <meta
+                                name="description"
+                                content="Test description"
+                            />
+                            <meta
+                                httpEquiv="content-type"
+                                content="text/html"
+                            />
+                            <meta property="og:type" content="article" />
+                            <meta
+                                itemProp="name"
+                                content="Test name itemprop"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1244,14 +1387,24 @@ describe("Helmet - Declarative API", () => {
 
             it("clears all meta tags if none are specified", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <meta name="description" content="Test description" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <meta
+                                name="description"
+                                content="Test description"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const existingTags = headElement.querySelectorAll(
@@ -1268,9 +1421,11 @@ describe("Helmet - Declarative API", () => {
 
             it("tags without 'name', 'http-equiv', 'property', 'charset', or 'itemprop' are not accepted", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <meta href="won't work" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <meta href="won't work" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1288,22 +1443,27 @@ describe("Helmet - Declarative API", () => {
 
             it("sets meta tags based on deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <meta charSet="utf-8" />
-                            <meta
-                                name="description"
-                                content="Test description"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <meta
-                                name="description"
-                                content="Inner description"
-                            />
-                            <meta name="keywords" content="test,meta,tags" />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <meta charSet="utf-8" />
+                                <meta
+                                    name="description"
+                                    content="Test description"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <meta
+                                    name="description"
+                                    content="Inner description"
+                                />
+                                <meta
+                                    name="keywords"
+                                    content="test,meta,tags"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1362,13 +1522,18 @@ describe("Helmet - Declarative API", () => {
 
             it("allows duplicate meta tags if specified in the same component", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <meta name="description" content="Test description" />
-                        <meta
-                            name="description"
-                            content="Duplicate description"
-                        />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <meta
+                                name="description"
+                                content="Test description"
+                            />
+                            <meta
+                                name="description"
+                                content="Duplicate description"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1418,24 +1583,26 @@ describe("Helmet - Declarative API", () => {
 
             it("overrides duplicate meta tags with single meta tag in a nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <meta
-                                name="description"
-                                content="Test description"
-                            />
-                            <meta
-                                name="description"
-                                content="Duplicate description"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <meta
-                                name="description"
-                                content="Inner description"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <meta
+                                    name="description"
+                                    content="Test description"
+                                />
+                                <meta
+                                    name="description"
+                                    content="Duplicate description"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <meta
+                                    name="description"
+                                    content="Inner description"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1470,24 +1637,26 @@ describe("Helmet - Declarative API", () => {
 
             it("overrides single meta tag with duplicate meta tags in a nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <meta
-                                name="description"
-                                content="Test description"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <meta
-                                name="description"
-                                content="Inner description"
-                            />
-                            <meta
-                                name="description"
-                                content="Inner duplicate description"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <meta
+                                    name="description"
+                                    content="Test description"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <meta
+                                    name="description"
+                                    content="Inner description"
+                                />
+                                <meta
+                                    name="description"
+                                    content="Inner duplicate description"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1537,12 +1706,14 @@ describe("Helmet - Declarative API", () => {
 
             it("does not render tag when primary attribute is null", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <meta
-                            name={undefined}
-                            content="Inner duplicate description"
-                        />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <meta
+                                name={undefined}
+                                content="Inner duplicate description"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1561,14 +1732,19 @@ describe("Helmet - Declarative API", () => {
         describe("link tags", () => {
             it("updates link tags", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <link href="http://localhost/helmet" rel="canonical" />
-                        <link
-                            href="http://localhost/style.css"
-                            rel="stylesheet"
-                            type="text/css"
-                        />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <link
+                                href="http://localhost/helmet"
+                                rel="canonical"
+                            />
+                            <link
+                                href="http://localhost/style.css"
+                                rel="stylesheet"
+                                type="text/css"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1602,14 +1778,24 @@ describe("Helmet - Declarative API", () => {
 
             it("clears all link tags if none are specified", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <link href="http://localhost/helmet" rel="canonical" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <link
+                                href="http://localhost/helmet"
+                                rel="canonical"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const tagNodes = headElement.querySelectorAll(
@@ -1629,9 +1815,11 @@ describe("Helmet - Declarative API", () => {
 
             it("tags without 'href' or 'rel' are not accepted, even if they are valid for other tags", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <link httpEquiv="won't work" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <link httpEquiv="won't work" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1650,26 +1838,28 @@ describe("Helmet - Declarative API", () => {
 
             it("tags 'rel' and 'href' properly use 'rel' as the primary identification for this tag, regardless of ordering", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <link
-                                href="http://localhost/helmet"
-                                rel="canonical"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet/new"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <link
-                                href="http://localhost/helmet/newest"
-                                rel="canonical"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <link
+                                    href="http://localhost/helmet"
+                                    rel="canonical"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet/new"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <link
+                                    href="http://localhost/helmet/newest"
+                                    rel="canonical"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1702,24 +1892,26 @@ describe("Helmet - Declarative API", () => {
 
             it("tags with rel='stylesheet' uses the href as the primary identification of the tag, regardless of ordering", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <link
-                                href="http://localhost/style.css"
-                                rel="stylesheet"
-                                type="text/css"
-                                media="all"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <link
-                                rel="stylesheet"
-                                href="http://localhost/inner.css"
-                                type="text/css"
-                                media="all"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <link
+                                    href="http://localhost/style.css"
+                                    rel="stylesheet"
+                                    type="text/css"
+                                    media="all"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <link
+                                    rel="stylesheet"
+                                    href="http://localhost/inner.css"
+                                    type="text/css"
+                                    media="all"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1771,32 +1963,34 @@ describe("Helmet - Declarative API", () => {
 
             it("sets link tags based on deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet"
-                            />
-                            <link
-                                href="http://localhost/style.css"
-                                rel="stylesheet"
-                                type="text/css"
-                                media="all"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet/innercomponent"
-                            />
-                            <link
-                                href="http://localhost/inner.css"
-                                rel="stylesheet"
-                                type="text/css"
-                                media="all"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet"
+                                />
+                                <link
+                                    href="http://localhost/style.css"
+                                    rel="stylesheet"
+                                    type="text/css"
+                                    media="all"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet/innercomponent"
+                                />
+                                <link
+                                    href="http://localhost/inner.css"
+                                    rel="stylesheet"
+                                    type="text/css"
+                                    media="all"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1859,13 +2053,18 @@ describe("Helmet - Declarative API", () => {
 
             it("allows duplicate link tags if specified in the same component", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <link rel="canonical" href="http://localhost/helmet" />
-                        <link
-                            rel="canonical"
-                            href="http://localhost/helmet/component"
-                        />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <link
+                                rel="canonical"
+                                href="http://localhost/helmet"
+                            />
+                            <link
+                                rel="canonical"
+                                href="http://localhost/helmet/component"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1911,24 +2110,26 @@ describe("Helmet - Declarative API", () => {
 
             it("overrides duplicate link tags with a single link tag in a nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet"
-                            />
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet/component"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet/innercomponent"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet"
+                                />
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet/component"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet/innercomponent"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -1961,24 +2162,26 @@ describe("Helmet - Declarative API", () => {
 
             it("overrides single link tag with duplicate link tags in a nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet"
-                            />
-                        </Helmet>
-                        <Helmet>
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet/component"
-                            />
-                            <link
-                                rel="canonical"
-                                href="http://localhost/helmet/innercomponent"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet"
+                                />
+                            </Helmet>
+                            <Helmet>
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet/component"
+                                />
+                                <link
+                                    rel="canonical"
+                                    href="http://localhost/helmet/innercomponent"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2024,13 +2227,15 @@ describe("Helmet - Declarative API", () => {
 
             it("does not render tag when primary attribute is null", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <link rel="icon" sizes="192x192" href={null} />
-                        <link
-                            rel="canonical"
-                            href="http://localhost/helmet/component"
-                        />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <link rel="icon" sizes="192x192" href={null} />
+                            <link
+                                rel="canonical"
+                                href="http://localhost/helmet/component"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2071,19 +2276,21 @@ describe("Helmet - Declarative API", () => {
                   }
                 `;
                 ReactDOM.render(
-                    <Helmet>
-                        <script
-                            src="http://localhost/test.js"
-                            type="text/javascript"
-                        />
-                        <script
-                            src="http://localhost/test2.js"
-                            type="text/javascript"
-                        />
-                        <script type="application/ld+json">
-                            {scriptInnerHTML}
-                        </script>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <script
+                                src="http://localhost/test.js"
+                                type="text/javascript"
+                            />
+                            <script
+                                src="http://localhost/test2.js"
+                                type="text/javascript"
+                            />
+                            <script type="application/ld+json">
+                                {scriptInnerHTML}
+                            </script>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2120,17 +2327,24 @@ describe("Helmet - Declarative API", () => {
 
             it("clears all scripts tags if none are specified", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <script
-                            src="http://localhost/test.js"
-                            type="text/javascript"
-                        />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <script
+                                src="http://localhost/test.js"
+                                type="text/javascript"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const existingTags = headElement.querySelectorAll(
@@ -2147,9 +2361,11 @@ describe("Helmet - Declarative API", () => {
 
             it("tags without 'src' are not accepted", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <script property="won't work" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <script property="won't work" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2167,18 +2383,20 @@ describe("Helmet - Declarative API", () => {
 
             it("sets script tags based on deepest nested component", done => {
                 ReactDOM.render(
-                    <div>
-                        <Helmet>
-                            <script
-                                src="http://localhost/test.js"
-                                type="text/javascript"
-                            />
-                            <script
-                                src="http://localhost/test2.js"
-                                type="text/javascript"
-                            />
-                        </Helmet>
-                    </div>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <div>
+                            <Helmet>
+                                <script
+                                    src="http://localhost/test.js"
+                                    type="text/javascript"
+                                />
+                                <script
+                                    src="http://localhost/test2.js"
+                                    type="text/javascript"
+                                />
+                            </Helmet>
+                        </div>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2228,9 +2446,11 @@ describe("Helmet - Declarative API", () => {
 
             it("sets undefined attribute values to empty strings", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <script src="foo.js" async={undefined} />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <script src="foo.js" async={undefined} />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2252,9 +2472,11 @@ describe("Helmet - Declarative API", () => {
 
             it("does not render tag when primary attribute (src) is null", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <script src={undefined} type="text/javascript" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <script src={undefined} type="text/javascript" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2271,9 +2493,11 @@ describe("Helmet - Declarative API", () => {
 
             it("does not render tag when primary attribute (innerHTML) is null", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <script innerHTML={undefined} />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <script innerHTML={undefined} />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2293,9 +2517,11 @@ describe("Helmet - Declarative API", () => {
             it("updates noscript tags", done => {
                 const noscriptInnerHTML = `<link rel="stylesheet" type="text/css" href="foo.css" />`;
                 ReactDOM.render(
-                    <Helmet>
-                        <noscript id="bar">{noscriptInnerHTML}</noscript>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <noscript id="bar">{noscriptInnerHTML}</noscript>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2317,9 +2543,11 @@ describe("Helmet - Declarative API", () => {
 
             it("clears all noscripts tags if none are specified", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <noscript id="bar" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <noscript id="bar" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2341,9 +2569,11 @@ describe("Helmet - Declarative API", () => {
 
             it("tags without 'innerHTML' are not accepted", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <noscript property="won't work" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <noscript property="won't work" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2361,9 +2591,11 @@ describe("Helmet - Declarative API", () => {
 
             it("does not render tag when primary attribute is null", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <noscript>{undefined}</noscript>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <noscript>{undefined}</noscript>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2393,10 +2625,12 @@ describe("Helmet - Declarative API", () => {
                 `;
 
                 ReactDOM.render(
-                    <Helmet>
-                        <style type="text/css">{cssText1}</style>
-                        <style>{cssText2}</style>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <style type="text/css">{cssText1}</style>
+                            <style>{cssText2}</style>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2439,14 +2673,21 @@ describe("Helmet - Declarative API", () => {
                     }
                 `;
                 ReactDOM.render(
-                    <Helmet>
-                        <style type="text/css">{cssText}</style>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <style type="text/css">{cssText}</style>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
                 raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                    ReactDOM.render(
+                        <HelmetProvider store={createHelmetStore()}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
                     raf(() => {
                         const existingTags = headElement.querySelectorAll(
@@ -2463,9 +2704,11 @@ describe("Helmet - Declarative API", () => {
 
             it("tags without 'cssText' are not accepted", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <style property="won't work" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <style property="won't work" />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2483,9 +2726,11 @@ describe("Helmet - Declarative API", () => {
 
             it("does not render tag when primary attribute is null", done => {
                 ReactDOM.render(
-                    <Helmet>
-                        <style>{undefined}</style>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <style>{undefined}</style>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -2513,14 +2758,16 @@ describe("Helmet - Declarative API", () => {
 
         it("executes synchronously when defer={true} and async otherwise", done => {
             ReactDOM.render(
-                <div>
-                    <Helmet defer={false}>
-                        <script>window.__spy__(1)</script>
-                    </Helmet>
-                    <Helmet>
-                        <script>window.__spy__(2)</script>
-                    </Helmet>
-                </div>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <div>
+                        <Helmet defer={false}>
+                            <script>window.__spy__(1)</script>
+                        </Helmet>
+                        <Helmet>
+                            <script>window.__spy__(2)</script>
+                        </Helmet>
+                    </div>
+                </HelmetProvider>,
                 container
             );
 
@@ -2571,13 +2818,9 @@ describe("Helmet - Declarative API", () => {
             `<style ${HELMET_ATTRIBUTE}="true" type="text/css">p {font-size: 12px;}</style>`
         ].join("");
 
-        before(() => {
-            Helmet.canUseDOM = false;
-        });
-
         it("provides initial values if no state is found", () => {
-            let head = Helmet.rewind();
-            head = Helmet.rewind();
+            const store = createHelmetStore();
+            const head = renderHelmetStatic(store);
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toString");
@@ -2586,14 +2829,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("encodes special characters in title", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <title>{`Dangerous <script> include`}</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <title>{`Dangerous <script> include`}</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -2602,14 +2848,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("opts out of string encoding", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet encodeSpecialCharacters={false}>
-                    <title>{"This is text and & and '."}</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet encodeSpecialCharacters={false}>
+                        <title>{"This is text and & and '."}</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
@@ -2617,14 +2866,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders title as React component", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <title>{`Dangerous <script> include`}</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <title>{`Dangerous <script> include`}</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toComponent");
@@ -2651,14 +2903,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders title with itemprop name as React component", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <title itemProp="name">Title with Itemprop</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <title itemProp="name">Title with Itemprop</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toComponent");
@@ -2685,14 +2940,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders base tag as React component", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <base target="_blank" href="http://localhost/" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <base target="_blank" href="http://localhost/" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.base).to.exist;
             expect(head.base).to.respondTo("toComponent");
@@ -2719,23 +2977,26 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders meta tags as React components", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <meta charSet="utf-8" />
-                    <meta
-                        name="description"
-                        content={
-                            "Test description & encoding of special characters like ' \" > < `"
-                        }
-                    />
-                    <meta httpEquiv="content-type" content="text/html" />
-                    <meta property="og:type" content="article" />
-                    <meta itemProp="name" content="Test name itemprop" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <meta charSet="utf-8" />
+                        <meta
+                            name="description"
+                            content={
+                                "Test description & encoding of special characters like ' \" > < `"
+                            }
+                        />
+                        <meta httpEquiv="content-type" content="text/html" />
+                        <meta property="og:type" content="article" />
+                        <meta itemProp="name" content="Test name itemprop" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toComponent");
@@ -2762,19 +3023,22 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders link tags as React components", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <link href="http://localhost/helmet" rel="canonical" />
-                    <link
-                        href="http://localhost/style.css"
-                        rel="stylesheet"
-                        type="text/css"
-                    />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <link href="http://localhost/helmet" rel="canonical" />
+                        <link
+                            href="http://localhost/style.css"
+                            rel="stylesheet"
+                            type="text/css"
+                        />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.link).to.exist;
             expect(head.link).to.respondTo("toComponent");
@@ -2801,21 +3065,24 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders script tags as React components", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <script
-                        src="http://localhost/test.js"
-                        type="text/javascript"
-                    />
-                    <script
-                        src="http://localhost/test2.js"
-                        type="text/javascript"
-                    />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <script
+                            src="http://localhost/test.js"
+                            type="text/javascript"
+                        />
+                        <script
+                            src="http://localhost/test2.js"
+                            type="text/javascript"
+                        />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.script).to.exist;
             expect(head.script).to.respondTo("toComponent");
@@ -2842,15 +3109,18 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders noscript tags as React components", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <noscript id="foo">{`<link rel="stylesheet" type="text/css" href="/style.css" />`}</noscript>
-                    <noscript id="bar">{`<link rel="stylesheet" type="text/css" href="/style2.css" />`}</noscript>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <noscript id="foo">{`<link rel="stylesheet" type="text/css" href="/style.css" />`}</noscript>
+                        <noscript id="bar">{`<link rel="stylesheet" type="text/css" href="/style2.css" />`}</noscript>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.noscript).to.exist;
             expect(head.noscript).to.respondTo("toComponent");
@@ -2877,15 +3147,18 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders style tags as React components", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <style type="text/css">{`body {background-color: green;}`}</style>
-                    <style type="text/css">{`p {font-size: 12px;}`}</style>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <style type="text/css">{`body {background-color: green;}`}</style>
+                        <style type="text/css">{`p {font-size: 12px;}`}</style>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.style).to.exist;
             expect(head.style).to.respondTo("toComponent");
@@ -2906,14 +3179,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders title tag as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <title>{"Dangerous <script> include"}</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <title>{"Dangerous <script> include"}</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -2925,15 +3201,18 @@ describe("Helmet - Declarative API", () => {
 
         it("renders title and allows children containing expressions", done => {
             const someValue = "Some Great Title";
+            const store = createHelmetStore();
 
             ReactDOM.render(
-                <Helmet>
-                    <title>Title: {someValue}</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <title>Title: {someValue}</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -2948,14 +3227,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders title with itemprop name as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <title itemProp="name">Title with Itemprop</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <title itemProp="name">Title with Itemprop</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -2967,14 +3249,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders base tags as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <base target="_blank" href="http://localhost/" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <base target="_blank" href="http://localhost/" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.base).to.exist;
             expect(head.base).to.respondTo("toString");
@@ -2985,21 +3270,24 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders meta tags as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <meta charSet="utf-8" />
-                    <meta
-                        name="description"
-                        content="Test description &amp; encoding of special characters like &#x27; &quot; &gt; &lt; `"
-                    />
-                    <meta httpEquiv="content-type" content="text/html" />
-                    <meta property="og:type" content="article" />
-                    <meta itemProp="name" content="Test name itemprop" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <meta charSet="utf-8" />
+                        <meta
+                            name="description"
+                            content="Test description &amp; encoding of special characters like &#x27; &quot; &gt; &lt; `"
+                        />
+                        <meta httpEquiv="content-type" content="text/html" />
+                        <meta property="og:type" content="article" />
+                        <meta itemProp="name" content="Test name itemprop" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toString");
@@ -3010,19 +3298,22 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders link tags as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <link href="http://localhost/helmet" rel="canonical" />
-                    <link
-                        href="http://localhost/style.css"
-                        rel="stylesheet"
-                        type="text/css"
-                    />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <link href="http://localhost/helmet" rel="canonical" />
+                        <link
+                            href="http://localhost/style.css"
+                            rel="stylesheet"
+                            type="text/css"
+                        />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.link).to.exist;
             expect(head.link).to.respondTo("toString");
@@ -3033,21 +3324,24 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders script tags as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <script
-                        src="http://localhost/test.js"
-                        type="text/javascript"
-                    />
-                    <script
-                        src="http://localhost/test2.js"
-                        type="text/javascript"
-                    />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <script
+                            src="http://localhost/test.js"
+                            type="text/javascript"
+                        />
+                        <script
+                            src="http://localhost/test2.js"
+                            type="text/javascript"
+                        />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.script).to.exist;
             expect(head.script).to.respondTo("toString");
@@ -3058,15 +3352,18 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders style tags as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <style type="text/css">{`body {background-color: green;}`}</style>
-                    <style type="text/css">{`p {font-size: 12px;}`}</style>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <style type="text/css">{`body {background-color: green;}`}</style>
+                        <style type="text/css">{`p {font-size: 12px;}`}</style>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.style).to.exist;
             expect(head.style).to.respondTo("toString");
@@ -3077,14 +3374,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders html attributes as component", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <html lang="ga" className="myClassName" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <html lang="ga" className="myClassName" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const {htmlAttributes} = Helmet.rewind();
+            const {htmlAttributes} = renderHelmetStatic(store);
             const attrs = htmlAttributes.toComponent();
 
             expect(attrs).to.exist;
@@ -3099,14 +3399,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders html attributes as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <html lang="ga" className="myClassName" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <html lang="ga" className="myClassName" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.htmlAttributes).to.exist;
             expect(head.htmlAttributes).to.respondTo("toString");
@@ -3117,14 +3420,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders body attributes as component", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <body lang="ga" className="myClassName" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <body lang="ga" className="myClassName" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const {bodyAttributes} = Helmet.rewind();
+            const {bodyAttributes} = renderHelmetStatic(store);
             const attrs = bodyAttributes.toComponent();
 
             expect(attrs).to.exist;
@@ -3139,14 +3445,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("renders body attributes as string", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <body lang="ga" className="myClassName" />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <body lang="ga" className="myClassName" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const body = Helmet.rewind();
+            const body = renderHelmetStatic(store);
 
             expect(body.bodyAttributes).to.exist;
             expect(body.bodyAttributes).to.respondTo("toString");
@@ -3159,17 +3468,20 @@ describe("Helmet - Declarative API", () => {
         it("does not encode all characters with HTML character entity equivalents", () => {
             const chineseTitle = "膣膗 鍆錌雔";
             const stringifiedChineseTitle = `<title ${HELMET_ATTRIBUTE}="true">${chineseTitle}</title>`;
+            const store = createHelmetStore();
 
             ReactDOM.render(
-                <div>
-                    <Helmet>
-                        <title>{chineseTitle}</title>
-                    </Helmet>
-                </div>,
+                <HelmetProvider store={store}>
+                    <div>
+                        <Helmet>
+                            <title>{chineseTitle}</title>
+                        </Helmet>
+                    </div>
+                </HelmetProvider>,
                 container
             );
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(store);
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -3179,10 +3491,10 @@ describe("Helmet - Declarative API", () => {
                 .that.equals(stringifiedChineseTitle);
         });
 
-        it("rewind() provides a fallback object for empty Helmet state", () => {
+        it("renderHelmetStatic() provides a fallback object for empty Helmet state", () => {
             ReactDOM.render(<div />, container);
 
-            const head = Helmet.rewind();
+            const head = renderHelmetStatic(createHelmetStore());
 
             expect(head.htmlAttributes).to.exist;
             expect(head.htmlAttributes).to.respondTo("toString");
@@ -3246,14 +3558,17 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("does not render undefined attribute values", () => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <script src="foo.js" async={undefined} />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <script src="foo.js" async={undefined} />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
-            const {script} = Helmet.rewind();
+            const {script} = renderHelmetStatic(store);
             const stringifiedScriptTag = script.toString();
 
             expect(stringifiedScriptTag)
@@ -3263,16 +3578,19 @@ describe("Helmet - Declarative API", () => {
                 );
         });
 
-        context("renderStatic", () => {
+        context("renderHelmetStatic", () => {
             it("does html encode title", () => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <Helmet>
-                        <title>{`Dangerous <script> include`}</title>
-                    </Helmet>,
+                    <HelmetProvider store={store}>
+                        <Helmet>
+                            <title>{`Dangerous <script> include`}</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
-                const head = Helmet.renderStatic();
+                const head = renderHelmetStatic(store);
 
                 expect(head.title).to.exist;
                 expect(head.title).to.respondTo("toString");
@@ -3281,14 +3599,17 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("renders title as React component", () => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <Helmet>
-                        <title>{`Dangerous <script> include`}</title>
-                    </Helmet>,
+                    <HelmetProvider store={store}>
+                        <Helmet>
+                            <title>{`Dangerous <script> include`}</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
-                const head = Helmet.renderStatic();
+                const head = renderHelmetStatic(store);
 
                 expect(head.title).to.exist;
                 expect(head.title).to.respondTo("toComponent");
@@ -3314,52 +3635,39 @@ describe("Helmet - Declarative API", () => {
                     .that.equals(`<div>${stringifiedTitle}</div>`);
             });
         });
-
-        after(() => {
-            Helmet.canUseDOM = true;
-        });
     });
 
     describe("misc", () => {
-        it("throws in rewind() when a DOM is present", () => {
+        it("lets you read current state in peekHelmetState() whether or not a DOM is present", done => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <title>Fancy title</title>
-                </Helmet>,
-                container
-            );
-
-            expect(Helmet.rewind).to.throw(
-                "You may only call rewind() on the server. Call peek() to read the current state."
-            );
-        });
-
-        it("lets you read current state in peek() whether or not a DOM is present", done => {
-            ReactDOM.render(
-                <Helmet>
-                    <title>Fancy title</title>
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <title>Fancy title</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
             raf(() => {
-                expect(Helmet.peek().title).to.be.equal("Fancy title");
-                Helmet.canUseDOM = false;
-                expect(Helmet.peek().title).to.be.equal("Fancy title");
-                Helmet.canUseDOM = true;
-
+                expect(peekHelmetState(store.getState()).title).to.be.equal(
+                    "Fancy title"
+                );
                 done();
             });
         });
 
         it("encodes special characters", done => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <Helmet>
-                    <meta
-                        name="description"
-                        content={'This is "quoted" text and & and \'.'}
-                    />
-                </Helmet>,
+                <HelmetProvider store={store}>
+                    <Helmet>
+                        <meta
+                            name="description"
+                            content={'This is "quoted" text and & and \'.'}
+                        />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
@@ -3394,20 +3702,27 @@ describe("Helmet - Declarative API", () => {
         it("does not change the DOM if it recevies identical props", done => {
             const spy = sinon.spy();
             ReactDOM.render(
-                <Helmet onChangeClientState={spy}>
-                    <meta name="description" content="Test description" />
-                    <title>Test Title</title>
-                </Helmet>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <Helmet onChangeClientState={spy}>
+                        <meta name="description" content="Test description" />
+                        <title>Test Title</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
             raf(() => {
                 // Re-rendering will pass new props to an already mounted Helmet
                 ReactDOM.render(
-                    <Helmet onChangeClientState={spy}>
-                        <meta name="description" content="Test description" />
-                        <title>Test Title</title>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet onChangeClientState={spy}>
+                            <meta
+                                name="description"
+                                content="Test description"
+                            />
+                            <title>Test Title</title>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -3424,12 +3739,14 @@ describe("Helmet - Declarative API", () => {
 
             const spy = sinon.spy();
             ReactDOM.render(
-                <Helmet onChangeClientState={spy}>
-                    <script
-                        src="http://localhost/test.js"
-                        type="text/javascript"
-                    />
-                </Helmet>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <Helmet onChangeClientState={spy}>
+                        <script
+                            src="http://localhost/test.js"
+                            type="text/javascript"
+                        />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
@@ -3450,14 +3767,16 @@ describe("Helmet - Declarative API", () => {
             let addedTags;
             let removedTags;
             ReactDOM.render(
-                <Helmet onChangeClientState={spy}>
-                    <link
-                        href="http://localhost/style.css"
-                        rel="stylesheet"
-                        type="text/css"
-                    />
-                    <meta name="description" content="Test description" />
-                </Helmet>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <Helmet onChangeClientState={spy}>
+                        <link
+                            href="http://localhost/style.css"
+                            rel="stylesheet"
+                            type="text/css"
+                        />
+                        <meta name="description" content="Test description" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
@@ -3480,19 +3799,24 @@ describe("Helmet - Declarative API", () => {
 
                 // Re-rendering will pass new props to an already mounted Helmet
                 ReactDOM.render(
-                    <Helmet onChangeClientState={spy}>
-                        <link
-                            href="http://localhost/style.css"
-                            rel="stylesheet"
-                            type="text/css"
-                        />
-                        <link
-                            href="http://localhost/style2.css"
-                            rel="stylesheet"
-                            type="text/css"
-                        />
-                        <meta name="description" content="New description" />
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet onChangeClientState={spy}>
+                            <link
+                                href="http://localhost/style.css"
+                                rel="stylesheet"
+                                type="text/css"
+                            />
+                            <link
+                                href="http://localhost/style2.css"
+                                rel="stylesheet"
+                                type="text/css"
+                            />
+                            <meta
+                                name="description"
+                                content="New description"
+                            />
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -3527,12 +3851,14 @@ describe("Helmet - Declarative API", () => {
             const warn = sinon.stub(console, "warn");
 
             ReactDOM.render(
-                <Helmet>
-                    <title>Test Title</title>
+                <HelmetProvider store={createHelmetStore()}>
                     <Helmet>
-                        <title>Title you will never see</title>
+                        <title>Test Title</title>
+                        <Helmet>
+                            <title>Title you will never see</title>
+                        </Helmet>
                     </Helmet>
-                </Helmet>,
+                </HelmetProvider>,
                 container
             );
 
@@ -3555,12 +3881,14 @@ describe("Helmet - Declarative API", () => {
             const warn = sinon.stub(console, "warn");
 
             ReactDOM.render(
-                <Helmet>
-                    <title>Test Title</title>
-                    <div>
-                        <title>Title you will never see</title>
-                    </div>
-                </Helmet>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <Helmet>
+                        <title>Test Title</title>
+                        <div>
+                            <title>Title you will never see</title>
+                        </div>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
@@ -3582,10 +3910,12 @@ describe("Helmet - Declarative API", () => {
             const warn = sinon.stub(console, "warn");
 
             ReactDOM.render(
-                <Helmet>
-                    <title>Test Title</title>
-                    <div customAttribute={true} />
-                </Helmet>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <Helmet>
+                        <title>Test Title</title>
+                        <div customAttribute={true} />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
@@ -3606,13 +3936,15 @@ describe("Helmet - Declarative API", () => {
         it("throws on invalid strings as children", () => {
             const renderInvalid = () =>
                 ReactDOM.render(
-                    <Helmet>
-                        <title>Test Title</title>
-                        <link
-                            href="http://localhost/helmet"
-                            rel="canonical"
-                        >{`test`}</link>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title>Test Title</title>
+                            <link
+                                href="http://localhost/helmet"
+                                rel="canonical"
+                            >{`test`}</link>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -3625,12 +3957,14 @@ describe("Helmet - Declarative API", () => {
         it("throws on invalid children", () => {
             const renderInvalid = () =>
                 ReactDOM.render(
-                    <Helmet>
-                        <title>Test Title</title>
-                        <script>
-                            <title>Title you will never see</title>
-                        </script>
-                    </Helmet>,
+                    <HelmetProvider store={createHelmetStore()}>
+                        <Helmet>
+                            <title>Test Title</title>
+                            <script>
+                                <title>Title you will never see</title>
+                            </script>
+                        </Helmet>
+                    </HelmetProvider>,
                     container
                 );
 
@@ -3644,10 +3978,12 @@ describe("Helmet - Declarative API", () => {
             const charSet = undefined;
 
             ReactDOM.render(
-                <Helmet>
-                    {charSet && <meta charSet={charSet} />}
-                    <title>Test Title</title>
-                </Helmet>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <Helmet>
+                        {charSet && <meta charSet={charSet} />}
+                        <title>Test Title</title>
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 
@@ -3660,9 +3996,11 @@ describe("Helmet - Declarative API", () => {
 
         it("recognizes valid tags regardless of attribute ordering", done => {
             ReactDOM.render(
-                <Helmet>
-                    <meta content="Test Description" name="description" />
-                </Helmet>,
+                <HelmetProvider store={createHelmetStore()}>
+                    <Helmet>
+                        <meta content="Test Description" name="description" />
+                    </Helmet>
+                </HelmetProvider>,
                 container
             );
 

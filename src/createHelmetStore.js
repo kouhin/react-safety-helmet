@@ -1,6 +1,7 @@
 import {createStore, applyMiddleware} from "redux";
 import ExecutionEnvironment from "exenv";
-import {reducePropsToState, handleClientStateChange} from "./HelmetUtils";
+import {handleClientStateChange} from "./HelmetUtils";
+import peekHelmetState from "./peekHelmetState";
 
 import rootReducer from "./modules";
 
@@ -10,7 +11,7 @@ function handleOnClientMiddleware({getState}) {
         const result = next(action);
         const nextState = getState();
         if (prevState !== nextState) {
-            const state = reducePropsToState(nextState.values);
+            const state = peekHelmetState(nextState);
             handleClientStateChange(state);
         }
         return result;
