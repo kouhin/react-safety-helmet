@@ -96,10 +96,10 @@ npm install --save react-safety-helmet
 ```
 
 ## Server Usage
-To use on the server, call `renderHelmetStatic()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
+To use on the server, call `store.rewind()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
 
 ```javascript
-import { createHelmetStore, renderHelmetStatic, HelmetProvider } from 'react-safety-helmet';
+import { createHelmetStore, HelmetProvider } from 'react-safety-helmet';
 
 const helmetStore = createHelmetStore();
 ReactDOMServer.renderToString(
@@ -107,7 +107,7 @@ ReactDOMServer.renderToString(
         <Handler />
     </HelmetProvider>
 );
-const helmet = renderHelmetStatic(store);
+const helmet = helmetStore.rewind();
 ```
 
 This `helmet` instance contains the following properties:
@@ -191,7 +191,7 @@ new Promise((resolve, reject) => {
     ).pipe(writable);
 
     writable.on('finish', () => {
-        const helmetObj = renderHelmetStatic(helmetStore);
+        const helmetObj = helmetStore.rewind();
         resolve({
             body: writable.buffer,
             helmet,
@@ -300,7 +300,7 @@ new Promise((resolve, reject) => {
 
 ### Where is `Helmet.rewind()`, `Helmet.renderStatic()` and `peek()` ?
 
-#### Use renderHelmetStatic(store) instead of Helmet.rewind() and Helmet.renderStatic()
+#### Use helmetStore.rewind() instead of Helmet.rewind() and Helmet.renderStatic()
 
 ``` javascript
 const helmetStore = createHelmetStore();
@@ -313,15 +313,15 @@ ReactDOMServer.renderToString(
     </HelmetProvider>
 );
 
-const head = renderHelmetStatic(helmetStore);
+const head = helmetStore.rewind();
 ```
 
-#### Use peekHelmetState(storeState) instead of Helmet.peek()
+#### Use helmetStore.peek() instead of Helmet.peek()
 
 ``` javascript
-const store = createHelmetStore();
+const helmetStore = createHelmetStore();
 ReactDOM.render(
-    <HelmetProvider store={store}>
+    <HelmetProvider store={helmetStore}>
         <Helmet>
             <title>Fancy title</title>
         </Helmet>
@@ -329,7 +329,7 @@ ReactDOM.render(
     container
 );
 
-peekHelmetState(store.getState()).title; // "Fancy title"
+helmetStore.peek().title; // "Fancy title"
 ```
 
 
