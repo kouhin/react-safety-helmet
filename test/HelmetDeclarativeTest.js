@@ -7,13 +7,7 @@ import ReactDOM from "react-dom";
 import ReactServer from "react-dom/server";
 import raf from "raf";
 
-import {
-    Helmet,
-    HelmetProvider,
-    createHelmetStore,
-    renderHelmetStatic,
-    peekHelmetState
-} from "../src";
+import {Helmet, HelmetProvider, createHelmetStore} from "../src";
 import {HTML_TAG_MAP} from "../src/HelmetConstants";
 
 const HELMET_ATTRIBUTE = "data-react-helmet";
@@ -2820,7 +2814,7 @@ describe("Helmet - Declarative API", () => {
 
         it("provides initial values if no state is found", () => {
             const store = createHelmetStore();
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toString");
@@ -2839,7 +2833,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -2858,7 +2852,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
@@ -2876,7 +2870,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toComponent");
@@ -2913,7 +2907,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toComponent");
@@ -2950,7 +2944,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.base).to.exist;
             expect(head.base).to.respondTo("toComponent");
@@ -2996,7 +2990,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toComponent");
@@ -3038,7 +3032,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.link).to.exist;
             expect(head.link).to.respondTo("toComponent");
@@ -3082,7 +3076,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.script).to.exist;
             expect(head.script).to.respondTo("toComponent");
@@ -3120,7 +3114,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.noscript).to.exist;
             expect(head.noscript).to.respondTo("toComponent");
@@ -3158,7 +3152,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.style).to.exist;
             expect(head.style).to.respondTo("toComponent");
@@ -3189,7 +3183,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -3212,7 +3206,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -3237,7 +3231,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -3259,7 +3253,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.base).to.exist;
             expect(head.base).to.respondTo("toString");
@@ -3287,7 +3281,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toString");
@@ -3313,7 +3307,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.link).to.exist;
             expect(head.link).to.respondTo("toString");
@@ -3341,7 +3335,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.script).to.exist;
             expect(head.script).to.respondTo("toString");
@@ -3363,7 +3357,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.style).to.exist;
             expect(head.style).to.respondTo("toString");
@@ -3384,7 +3378,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const {htmlAttributes} = renderHelmetStatic(store);
+            const {htmlAttributes} = store.rewind();
             const attrs = htmlAttributes.toComponent();
 
             expect(attrs).to.exist;
@@ -3409,7 +3403,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.htmlAttributes).to.exist;
             expect(head.htmlAttributes).to.respondTo("toString");
@@ -3430,7 +3424,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const {bodyAttributes} = renderHelmetStatic(store);
+            const {bodyAttributes} = store.rewind();
             const attrs = bodyAttributes.toComponent();
 
             expect(attrs).to.exist;
@@ -3455,7 +3449,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const body = renderHelmetStatic(store);
+            const body = store.rewind();
 
             expect(body.bodyAttributes).to.exist;
             expect(body.bodyAttributes).to.respondTo("toString");
@@ -3481,7 +3475,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = renderHelmetStatic(store);
+            const head = store.rewind();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -3491,10 +3485,10 @@ describe("Helmet - Declarative API", () => {
                 .that.equals(stringifiedChineseTitle);
         });
 
-        it("renderHelmetStatic() provides a fallback object for empty Helmet state", () => {
+        it("store.rewind() provides a fallback object for empty Helmet state", () => {
             ReactDOM.render(<div />, container);
 
-            const head = renderHelmetStatic(createHelmetStore());
+            const head = createHelmetStore().rewind();
 
             expect(head.htmlAttributes).to.exist;
             expect(head.htmlAttributes).to.respondTo("toString");
@@ -3568,7 +3562,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const {script} = renderHelmetStatic(store);
+            const {script} = store.rewind();
             const stringifiedScriptTag = script.toString();
 
             expect(stringifiedScriptTag)
@@ -3578,7 +3572,7 @@ describe("Helmet - Declarative API", () => {
                 );
         });
 
-        context("renderHelmetStatic", () => {
+        context("store.rewind()", () => {
             it("does html encode title", () => {
                 const store = createHelmetStore();
                 ReactDOM.render(
@@ -3590,7 +3584,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                const head = renderHelmetStatic(store);
+                const head = store.rewind();
 
                 expect(head.title).to.exist;
                 expect(head.title).to.respondTo("toString");
@@ -3609,7 +3603,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                const head = renderHelmetStatic(store);
+                const head = store.rewind();
 
                 expect(head.title).to.exist;
                 expect(head.title).to.respondTo("toComponent");
@@ -3638,7 +3632,7 @@ describe("Helmet - Declarative API", () => {
     });
 
     describe("misc", () => {
-        it("lets you read current state in peekHelmetState() whether or not a DOM is present", done => {
+        it("lets you read current state in store.peek() whether or not a DOM is present", done => {
             const store = createHelmetStore();
             ReactDOM.render(
                 <HelmetProvider store={store}>
@@ -3650,9 +3644,7 @@ describe("Helmet - Declarative API", () => {
             );
 
             raf(() => {
-                expect(peekHelmetState(store.getState()).title).to.be.equal(
-                    "Fancy title"
-                );
+                expect(store.peek().title).to.be.equal("Fancy title");
                 done();
             });
         });
