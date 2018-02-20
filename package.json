@@ -1,7 +1,7 @@
 {
   "name": "react-safety-helmet",
   "description": "A fork of react-helmet that support for renderToNodeStream and thread safe with the power of redux",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "main": "./lib/Helmet.js",
   "author": [
     "Bin Hou <houbin217jz@gmail.com> (https://github.com/kouhin)",
