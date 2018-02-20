@@ -57,6 +57,10 @@ const Helmet = Component =>
             encodeSpecialCharacters: true
         };
 
+        static set canUseDOM(canUseDOM) {
+            Component.canUseDOM = canUseDOM;
+        }
+
         shouldComponentUpdate(nextProps) {
             return !deepEqual(this.props, nextProps);
         }
@@ -253,26 +257,7 @@ function createHelmetStore(...args) {
     const store = createStore(...args);
     return {
         ...store,
-        renderStatic: () => {
-            let mappedState = mapStateOnServer(store.peek());
-            if (!mappedState) {
-                // provide fallback if mappedState is undefined
-                mappedState = mapStateOnServer({
-                    baseTag: [],
-                    bodyAttributes: {},
-                    encodeSpecialCharacters: true,
-                    htmlAttributes: {},
-                    linkTags: [],
-                    metaTags: [],
-                    noscriptTags: [],
-                    scriptTags: [],
-                    styleTags: [],
-                    title: "",
-                    titleAttributes: {}
-                });
-            }
-            return mappedState;
-        }
+        renderStatic: () => mapStateOnServer(store.peek())
     };
 }
 export {HelmetExport as Helmet};

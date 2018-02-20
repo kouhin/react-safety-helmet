@@ -3577,7 +3577,7 @@ describe("Helmet - Declarative API", () => {
                 .that.equals(stringifiedChineseTitle);
         });
 
-        it("rewind() provides a fallback object for empty Helmet state", () => {
+        it("renderStatic() provides a fallback object for empty Helmet state", () => {
             const store = createHelmetStore();
             ReactDOM.render(<div />, container);
 
