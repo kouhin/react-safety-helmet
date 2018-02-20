@@ -5,10 +5,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactServer from "react-dom/server";
-import raf from "raf";
-
-import {Helmet, HelmetProvider, createHelmetStore} from "../src";
+import {Helmet, HelmetProvider, createHelmetStore} from "../src/Helmet";
 import {HTML_TAG_MAP} from "../src/HelmetConstants";
+import {requestAnimationFrame} from "../src/HelmetUtils.js";
 
 const HELMET_ATTRIBUTE = "data-react-helmet";
 
@@ -32,8 +31,9 @@ describe("Helmet - Declarative API", () => {
     describe("api", () => {
         describe("title", () => {
             it("updates page title", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet defaultTitle={"Fallback"}>
                             <title>Test Title</title>
                         </Helmet>
@@ -41,7 +41,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Test Title");
 
                     done();
@@ -49,10 +49,11 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates page title and allows children containing expressions", done => {
+                const store = createHelmetStore();
                 const someValue = "Some Great Title";
 
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title>Title: {someValue}</title>
                         </Helmet>
@@ -60,7 +61,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Title: Some Great Title");
 
                     done();
@@ -68,8 +69,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates page title with multiple children", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <title>Test Title</title>
@@ -85,7 +87,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Child Two Title");
 
                     done();
@@ -93,8 +95,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets title based on deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <title>Main Title</title>
@@ -107,7 +110,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Nested Title");
 
                     done();
@@ -115,8 +118,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets title using deepest nested component with a defined title", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <title>Main Title</title>
@@ -127,7 +131,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Main Title");
 
                     done();
@@ -135,8 +139,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("uses defaultTitle if no title is defined", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet
                             defaultTitle={"Fallback"}
                             titleTemplate={
@@ -149,7 +154,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Fallback");
 
                     done();
@@ -157,8 +162,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("uses a titleTemplate if defined", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet
                             defaultTitle={"Fallback"}
                             titleTemplate={
@@ -171,7 +177,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal(
                         "This is a Test of the titleTemplate feature"
                     );
@@ -181,8 +187,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("replaces multiple title strings in titleTemplate", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet
                             titleTemplate={
                                 "This is a %s of the titleTemplate feature. Another %s."
@@ -194,7 +201,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal(
                         "This is a Test of the titleTemplate feature. Another Test."
                     );
@@ -204,8 +211,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("uses a titleTemplate based on deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet
                                 titleTemplate={
@@ -226,7 +234,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal(
                         "A Second Test using nested titleTemplate attributes"
                     );
@@ -236,8 +244,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("merges deepest component title with nearest upstream titleTemplate", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet
                                 titleTemplate={
@@ -254,7 +263,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal(
                         "This is a Second Test of the titleTemplate feature"
                     );
@@ -264,10 +273,11 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("renders dollar characters in a title correctly when titleTemplate present", done => {
+                const store = createHelmetStore();
                 const dollarTitle = "te$t te$$t te$$$t te$$$$t";
 
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet titleTemplate={"This is a %s"}>
                             <title>{dollarTitle}</title>
                         </Helmet>
@@ -275,7 +285,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal(
                         "This is a te$t te$$t te$$$t te$$$$t"
                     );
@@ -285,10 +295,11 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not encode all characters with HTML character entity equivalents", done => {
+                const store = createHelmetStore();
                 const chineseTitle = "膣膗 鍆錌雔";
 
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title>{chineseTitle}</title>
                         </Helmet>
@@ -296,7 +307,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal(chineseTitle);
 
                     done();
@@ -304,8 +315,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("page title with prop itemProp", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet defaultTitle={"Fallback"}>
                             <title itemProp="name">
                                 Test Title with itemProp
@@ -315,7 +327,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
                     expect(document.title).to.equal("Test Title with itemProp");
                     expect(titleTag.getAttribute("itemprop")).to.equal("name");
@@ -325,10 +337,11 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("retains existing title tag when no title tag is defined", done => {
+                const store = createHelmetStore();
                 headElement.innerHTML = `<title>Existing Title</title>`;
 
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <meta name="keywords" content="stuff" />
                         </Helmet>
@@ -336,7 +349,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Existing Title");
 
                     done();
@@ -344,8 +357,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it.skip("clears title tag if empty title is defined", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title>Existing Title</title>
                             <meta name="keywords" content="stuff" />
@@ -354,11 +368,11 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(document.title).to.equal("Existing Title");
 
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <title />
                                 <meta name="keywords" content="stuff" />
@@ -367,7 +381,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         expect(document.title).to.equal("");
                         done();
                     });
@@ -381,8 +395,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates title attributes", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title itemProp="name" />
                         </Helmet>
@@ -390,7 +405,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
 
                     expect(titleTag.getAttribute("itemprop")).to.equal("name");
@@ -403,8 +418,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets attributes based on the deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <title lang="en" hidden />
@@ -417,7 +433,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
 
                     expect(titleTag.getAttribute("lang")).to.equal("ja");
@@ -431,8 +447,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("handles valueless attributes", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title hidden />
                         </Helmet>
@@ -440,7 +457,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const titleTag = document.getElementsByTagName("title")[0];
 
                     expect(titleTag.getAttribute("hidden")).to.equal("true");
@@ -453,8 +470,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears title attributes that are handled within helmet", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title lang="en" hidden />
                         </Helmet>
@@ -462,10 +480,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                requestAnimationFrame(() => {
+                    ReactDOM.render(
+                        <HelmetProvider store={store}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const titleTag = document.getElementsByTagName(
                             "title"
                         )[0];
@@ -484,8 +507,9 @@ describe("Helmet - Declarative API", () => {
 
         describe("html attributes", () => {
             it("updates html attributes", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <html className="myClassName" lang="en" />
                         </Helmet>
@@ -493,7 +517,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const htmlTag = document.getElementsByTagName("html")[0];
 
                     expect(htmlTag.getAttribute("class")).to.equal(
@@ -509,8 +533,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets attributes based on the deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <html lang="en" />
@@ -523,7 +548,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const htmlTag = document.getElementsByTagName("html")[0];
 
                     expect(htmlTag.getAttribute("lang")).to.equal("ja");
@@ -536,8 +561,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("handles valueless attributes", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <html amp />
                         </Helmet>
@@ -545,7 +571,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const htmlTag = document.getElementsByTagName("html")[0];
 
                     expect(htmlTag.getAttribute("amp")).to.equal("true");
@@ -558,8 +584,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears html attributes that are handled within helmet", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <html lang="en" amp />
                         </Helmet>
@@ -567,15 +594,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -592,8 +619,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates with multiple additions and removals - overwrite and new", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <html lang="en" amp />
                         </Helmet>
@@ -601,9 +629,9 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <html
                                     lang="ja"
@@ -615,7 +643,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -636,8 +664,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates with multiple additions and removals - all new", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <html lang="en" amp />
                         </Helmet>
@@ -645,9 +674,9 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <html id="html-tag" title="html tag" />
                             </Helmet>
@@ -655,7 +684,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -682,14 +711,15 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("are not cleared", done => {
+                    const store = createHelmetStore();
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -704,8 +734,9 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("overwritten if specified in helmet", done => {
+                    const store = createHelmetStore();
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <html test="helmet-attr" />
                             </Helmet>
@@ -713,7 +744,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const htmlTag = document.getElementsByTagName(
                             "html"
                         )[0];
@@ -730,8 +761,9 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("cleared once it is managed in helmet", done => {
+                    const store = createHelmetStore();
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <html test="helmet-attr" />
                             </Helmet>
@@ -739,10 +771,15 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
-                        ReactDOM.render(<Helmet />, container);
+                    requestAnimationFrame(() => {
+                        ReactDOM.render(
+                            <HelmetProvider store={store}>
+                                <Helmet />
+                            </HelmetProvider>,
+                            container
+                        );
 
-                        raf(() => {
+                        requestAnimationFrame(() => {
                             const htmlTag = document.getElementsByTagName(
                                 "html"
                             )[0];
@@ -782,6 +819,7 @@ describe("Helmet - Declarative API", () => {
 
                 Object.keys(attributeList).forEach(attribute => {
                     it(attribute, done => {
+                        const store = createHelmetStore();
                         const attrValue = attributeList[attribute];
 
                         const attr = {
@@ -789,7 +827,7 @@ describe("Helmet - Declarative API", () => {
                         };
 
                         ReactDOM.render(
-                            <HelmetProvider store={createHelmetStore()}>
+                            <HelmetProvider store={store}>
                                 <Helmet>
                                     <body {...attr} />
                                 </Helmet>
@@ -797,7 +835,7 @@ describe("Helmet - Declarative API", () => {
                             container
                         );
 
-                        raf(() => {
+                        requestAnimationFrame(() => {
                             const bodyTag = document.body;
 
                             const reactCompatAttr =
@@ -816,8 +854,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates multiple body attributes", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <body className="myClassName" tabIndex={-1} />
                         </Helmet>
@@ -825,7 +864,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const bodyTag = document.body;
 
                     expect(bodyTag.getAttribute("class")).to.equal(
@@ -841,8 +880,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets attributes based on the deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <body lang="en" />
@@ -855,7 +895,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const bodyTag = document.body;
 
                     expect(bodyTag.getAttribute("lang")).to.equal("ja");
@@ -868,8 +908,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("handles valueless attributes", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <body hidden />
                         </Helmet>
@@ -877,7 +918,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const bodyTag = document.body;
 
                     expect(bodyTag.getAttribute("hidden")).to.equal("true");
@@ -890,8 +931,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears body attributes that are handled within helmet", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <body lang="en" hidden />
                         </Helmet>
@@ -899,10 +941,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                requestAnimationFrame(() => {
+                    ReactDOM.render(
+                        <HelmetProvider store={store}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("lang")).to.be.null;
@@ -917,8 +964,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates with multiple additions and removals - overwrite and new", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <body lang="en" hidden />
                         </Helmet>
@@ -926,9 +974,9 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <body
                                     lang="ja"
@@ -940,7 +988,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("hidden")).to.equal(null);
@@ -959,8 +1007,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("updates with multiple additions and removals - all new", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <body lang="en" hidden />
                         </Helmet>
@@ -968,9 +1017,9 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <body id="body-tag" title="body tag" />
                             </Helmet>
@@ -978,7 +1027,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("hidden")).to.equal(null);
@@ -1003,14 +1052,15 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("attributes are not cleared", done => {
+                    const store = createHelmetStore();
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("test")).to.equal("test");
@@ -1023,8 +1073,9 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("attributes are overwritten if specified in helmet", done => {
+                    const store = createHelmetStore();
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <body test="helmet-attr" />
                             </Helmet>
@@ -1032,7 +1083,7 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const bodyTag = document.body;
 
                         expect(bodyTag.getAttribute("test")).to.equal(
@@ -1047,8 +1098,9 @@ describe("Helmet - Declarative API", () => {
                 });
 
                 it("attributes are cleared once managed in helmet", done => {
+                    const store = createHelmetStore();
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet>
                                 <body test="helmet-attr" />
                             </Helmet>
@@ -1056,10 +1108,15 @@ describe("Helmet - Declarative API", () => {
                         container
                     );
 
-                    raf(() => {
-                        ReactDOM.render(<Helmet />, container);
+                    requestAnimationFrame(() => {
+                        ReactDOM.render(
+                            <HelmetProvider store={store}>
+                                <Helmet />
+                            </HelmetProvider>,
+                            container
+                        );
 
-                        raf(() => {
+                        requestAnimationFrame(() => {
                             const bodyTag = document.body;
 
                             expect(bodyTag.getAttribute("test")).to.equal(null);
@@ -1076,9 +1133,10 @@ describe("Helmet - Declarative API", () => {
 
         describe("onChangeClientState", () => {
             it("when handling client state change, calls the function with new state, addedTags and removedTags ", done => {
+                const store = createHelmetStore();
                 const spy = sinon.spy();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet onChangeClientState={spy}>
                                 <base href="http://mysite.com/" />
@@ -1098,7 +1156,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(spy.called).to.equal(true);
                     const newState = spy.getCall(0).args[0];
                     const addedTags = spy.getCall(0).args[1];
@@ -1149,9 +1207,10 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("calls the deepest defined callback with the deepest state", done => {
+                const store = createHelmetStore();
                 const spy = sinon.spy();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet onChangeClientState={spy}>
                                 <title>Main Title</title>
@@ -1164,7 +1223,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(spy.callCount).to.equal(1);
                     expect(spy.getCall(0).args[0]).to.contain({
                         title: "Deeper Title"
@@ -1177,8 +1236,9 @@ describe("Helmet - Declarative API", () => {
 
         describe("base tag", () => {
             it("updates base tag", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <base href="http://mysite.com/" />
                         </Helmet>
@@ -1186,7 +1246,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1209,22 +1269,23 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears the base tag if one is not specified", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet base={{href: "http://mysite.com/"}} />
                     </HelmetProvider>,
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const existingTags = headElement.querySelectorAll(
                             `base[${HELMET_ATTRIBUTE}]`
                         );
@@ -1238,8 +1299,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags without 'href' are not accepted", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <base property="won't work" />
                         </Helmet>
@@ -1247,7 +1309,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1260,8 +1322,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets base tag based on deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <base href="http://mysite.com" />
@@ -1274,7 +1337,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1286,8 +1349,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(1);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("href")).to.equal(
@@ -1302,8 +1365,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not render tag when primary attribute is null", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <base href={undefined} />
                         </Helmet>
@@ -1311,7 +1375,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `base[${HELMET_ATTRIBUTE}]`
                     );
@@ -1325,8 +1389,9 @@ describe("Helmet - Declarative API", () => {
 
         describe("meta tags", () => {
             it("updates meta tags", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <meta charSet="utf-8" />
                             <meta
@@ -1347,7 +1412,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1380,8 +1445,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears all meta tags if none are specified", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <meta
                                 name="description"
@@ -1392,15 +1458,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const existingTags = headElement.querySelectorAll(
                             `meta[${HELMET_ATTRIBUTE}]`
                         );
@@ -1414,8 +1480,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags without 'name', 'http-equiv', 'property', 'charset', or 'itemprop' are not accepted", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <meta href="won't work" />
                         </Helmet>
@@ -1423,7 +1490,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1436,8 +1503,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets meta tags based on deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <meta charSet="utf-8" />
@@ -1461,7 +1529,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1475,8 +1543,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(3);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("charset")).to.equal("utf-8");
@@ -1484,8 +1552,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta charset="utf-8" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("name")).to.equal(
@@ -1498,8 +1566,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta name="description" content="Inner description" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[2]")
+                    expect(existingTags).to.have.deep
+                        .property("[2]")
                         .that.is.an.instanceof(Element);
                     expect(thirdTag).to.have.property("getAttribute");
                     expect(thirdTag.getAttribute("name")).to.equal("keywords");
@@ -1515,8 +1583,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("allows duplicate meta tags if specified in the same component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <meta
                                 name="description"
@@ -1531,7 +1600,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1543,8 +1612,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("name")).to.equal(
@@ -1557,8 +1626,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta name="description" content="Test description" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("name")).to.equal(
@@ -1576,8 +1645,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("overrides duplicate meta tags with single meta tag in a nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <meta
@@ -1600,7 +1670,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1611,8 +1681,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(1);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("name")).to.equal(
@@ -1630,8 +1700,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("overrides single meta tag with duplicate meta tags in a nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <meta
@@ -1654,7 +1725,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1666,8 +1737,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("name")).to.equal(
@@ -1680,8 +1751,8 @@ describe("Helmet - Declarative API", () => {
                         `<meta name="description" content="Inner description" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("name")).to.equal(
@@ -1699,8 +1770,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not render tag when primary attribute is null", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <meta
                                 name={undefined}
@@ -1711,7 +1783,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `meta[${HELMET_ATTRIBUTE}]`
                     );
@@ -1725,8 +1797,9 @@ describe("Helmet - Declarative API", () => {
 
         describe("link tags", () => {
             it("updates link tags", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <link
                                 href="http://localhost/helmet"
@@ -1742,7 +1815,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1771,8 +1844,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears all link tags if none are specified", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <link
                                 href="http://localhost/helmet"
@@ -1783,15 +1857,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const tagNodes = headElement.querySelectorAll(
                             `link[${HELMET_ATTRIBUTE}]`
                         );
@@ -1808,8 +1882,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags without 'href' or 'rel' are not accepted, even if they are valid for other tags", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <link httpEquiv="won't work" />
                         </Helmet>
@@ -1817,7 +1892,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1831,8 +1906,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags 'rel' and 'href' properly use 'rel' as the primary identification for this tag, regardless of ordering", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <link
@@ -1857,7 +1933,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1868,8 +1944,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(1);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -1885,8 +1961,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags with rel='stylesheet' uses the href as the primary identification of the tag, regardless of ordering", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <link
@@ -1909,7 +1986,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -1921,8 +1998,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.equal(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("href")).to.equal(
@@ -1935,8 +2012,8 @@ describe("Helmet - Declarative API", () => {
                         `<link href="http://localhost/style.css" rel="stylesheet" type="text/css" media="all" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("rel")).to.equal(
@@ -1956,8 +2033,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets link tags based on deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <link
@@ -1988,7 +2066,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -2001,8 +2079,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.at.least(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("href")).to.equal(
@@ -2015,8 +2093,8 @@ describe("Helmet - Declarative API", () => {
                         `<link href="http://localhost/style.css" rel="stylesheet" type="text/css" media="all" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("href")).to.equal(
@@ -2027,8 +2105,8 @@ describe("Helmet - Declarative API", () => {
                         `<link rel="canonical" href="http://localhost/helmet/innercomponent" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[2]")
+                    expect(existingTags).to.have.deep
+                        .property("[2]")
                         .that.is.an.instanceof(Element);
                     expect(thirdTag).to.have.property("getAttribute");
                     expect(thirdTag.getAttribute("href")).to.equal(
@@ -2046,8 +2124,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("allows duplicate link tags if specified in the same component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <link
                                 rel="canonical"
@@ -2062,7 +2141,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -2074,8 +2153,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.at.least(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -2086,8 +2165,8 @@ describe("Helmet - Declarative API", () => {
                         `<link rel="canonical" href="http://localhost/helmet" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("rel")).to.equal("canonical");
@@ -2103,8 +2182,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("overrides duplicate link tags with a single link tag in a nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <link
@@ -2127,7 +2207,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -2138,8 +2218,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(1);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -2155,8 +2235,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("overrides single link tag with duplicate link tags in a nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <link
@@ -2179,7 +2260,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -2191,8 +2272,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.equal(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -2203,8 +2284,8 @@ describe("Helmet - Declarative API", () => {
                         `<link rel="canonical" href="http://localhost/helmet/component" ${HELMET_ATTRIBUTE}="true">`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("rel")).to.equal("canonical");
@@ -2220,8 +2301,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not render tag when primary attribute is null", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <link rel="icon" sizes="192x192" href={null} />
                             <link
@@ -2233,7 +2315,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `link[${HELMET_ATTRIBUTE}]`
                     );
@@ -2243,8 +2325,8 @@ describe("Helmet - Declarative API", () => {
                     expect(existingTags).to.not.equal(undefined);
                     expect(existingTags.length).to.be.equal(1);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("rel")).to.equal("canonical");
@@ -2262,6 +2344,7 @@ describe("Helmet - Declarative API", () => {
 
         describe("script tags", () => {
             it("updates script tags", done => {
+                const store = createHelmetStore();
                 const scriptInnerHTML = `
                   {
                     "@context": "http://schema.org",
@@ -2270,7 +2353,7 @@ describe("Helmet - Declarative API", () => {
                   }
                 `;
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <script
                                 src="http://localhost/test.js"
@@ -2288,7 +2371,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.getElementsByTagName(
                         "script"
                     );
@@ -2320,8 +2403,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears all scripts tags if none are specified", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <script
                                 src="http://localhost/test.js"
@@ -2332,15 +2416,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const existingTags = headElement.querySelectorAll(
                             `script[${HELMET_ATTRIBUTE}]`
                         );
@@ -2354,8 +2438,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags without 'src' are not accepted", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <script property="won't work" />
                         </Helmet>
@@ -2363,7 +2448,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2376,8 +2461,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets script tags based on deepest nested component", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <div>
                             <Helmet>
                                 <script
@@ -2394,7 +2480,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2406,8 +2492,8 @@ describe("Helmet - Declarative API", () => {
 
                     expect(existingTags.length).to.be.at.least(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("src")).to.equal(
@@ -2420,8 +2506,8 @@ describe("Helmet - Declarative API", () => {
                         `<script src="http://localhost/test.js" type="text/javascript" ${HELMET_ATTRIBUTE}="true"></script>`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag).to.have.property("getAttribute");
                     expect(secondTag.getAttribute("src")).to.equal(
@@ -2439,8 +2525,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("sets undefined attribute values to empty strings", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <script src="foo.js" async={undefined} />
                         </Helmet>
@@ -2448,14 +2535,14 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTag = headElement.querySelector(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
 
                     expect(existingTag).to.not.equal(undefined);
-                    expect(existingTag.outerHTML)
-                        .to.be.a("string")
+                    expect(existingTag.outerHTML).to.be
+                        .a("string")
                         .that.equals(
                             `<script src="foo.js" async="" ${HELMET_ATTRIBUTE}="true"></script>`
                         );
@@ -2465,8 +2552,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not render tag when primary attribute (src) is null", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <script src={undefined} type="text/javascript" />
                         </Helmet>
@@ -2474,7 +2562,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2486,8 +2574,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not render tag when primary attribute (innerHTML) is null", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <script innerHTML={undefined} />
                         </Helmet>
@@ -2495,7 +2584,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `script[${HELMET_ATTRIBUTE}]`
                     );
@@ -2509,9 +2598,10 @@ describe("Helmet - Declarative API", () => {
 
         describe("noscript tags", () => {
             it("updates noscript tags", done => {
+                const store = createHelmetStore();
                 const noscriptInnerHTML = `<link rel="stylesheet" type="text/css" href="foo.css" />`;
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <noscript id="bar">{noscriptInnerHTML}</noscript>
                         </Helmet>
@@ -2519,7 +2609,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.getElementsByTagName(
                         "noscript"
                     );
@@ -2536,8 +2626,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears all noscripts tags if none are specified", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <noscript id="bar" />
                         </Helmet>
@@ -2545,10 +2636,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
-                    ReactDOM.render(<Helmet />, container);
+                requestAnimationFrame(() => {
+                    ReactDOM.render(
+                        <HelmetProvider store={store}>
+                            <Helmet />
+                        </HelmetProvider>,
+                        container
+                    );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const existingTags = headElement.querySelectorAll(
                             `script[${HELMET_ATTRIBUTE}]`
                         );
@@ -2562,8 +2658,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags without 'innerHTML' are not accepted", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <noscript property="won't work" />
                         </Helmet>
@@ -2571,7 +2668,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.querySelectorAll(
                         `noscript[${HELMET_ATTRIBUTE}]`
                     );
@@ -2584,8 +2681,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not render tag when primary attribute is null", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <noscript>{undefined}</noscript>
                         </Helmet>
@@ -2593,7 +2691,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `noscript[${HELMET_ATTRIBUTE}]`
                     );
@@ -2607,6 +2705,7 @@ describe("Helmet - Declarative API", () => {
 
         describe("style tags", () => {
             it("updates style tags", done => {
+                const store = createHelmetStore();
                 const cssText1 = `
                     body {
                         background-color: green;
@@ -2619,7 +2718,7 @@ describe("Helmet - Declarative API", () => {
                 `;
 
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <style type="text/css">{cssText1}</style>
                             <style>{cssText2}</style>
@@ -2628,7 +2727,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `style[${HELMET_ATTRIBUTE}]`
                     );
@@ -2638,8 +2737,8 @@ describe("Helmet - Declarative API", () => {
                     expect(existingTags).to.not.equal(undefined);
                     expect(existingTags.length).to.be.equal(2);
 
-                    expect(existingTags)
-                        .to.have.deep.property("[0]")
+                    expect(existingTags).to.have.deep
+                        .property("[0]")
                         .that.is.an.instanceof(Element);
                     expect(firstTag).to.have.property("getAttribute");
                     expect(firstTag.getAttribute("type")).to.equal("text/css");
@@ -2648,8 +2747,8 @@ describe("Helmet - Declarative API", () => {
                         `<style type="text/css" ${HELMET_ATTRIBUTE}="true">${cssText1}</style>`
                     );
 
-                    expect(existingTags)
-                        .to.have.deep.property("[1]")
+                    expect(existingTags).to.have.deep
+                        .property("[1]")
                         .that.is.an.instanceof(Element);
                     expect(secondTag.innerHTML).to.equal(cssText2);
                     expect(secondTag.outerHTML).to.equal(
@@ -2661,13 +2760,14 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("clears all style tags if none are specified", done => {
+                const store = createHelmetStore();
                 const cssText = `
                     body {
                         background-color: green;
                     }
                 `;
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <style type="text/css">{cssText}</style>
                         </Helmet>
@@ -2675,15 +2775,15 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     ReactDOM.render(
-                        <HelmetProvider store={createHelmetStore()}>
+                        <HelmetProvider store={store}>
                             <Helmet />
                         </HelmetProvider>,
                         container
                     );
 
-                    raf(() => {
+                    requestAnimationFrame(() => {
                         const existingTags = headElement.querySelectorAll(
                             `style[${HELMET_ATTRIBUTE}]`
                         );
@@ -2697,8 +2797,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("tags without 'cssText' are not accepted", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <style property="won't work" />
                         </Helmet>
@@ -2706,7 +2807,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const existingTags = headElement.querySelectorAll(
                         `style[${HELMET_ATTRIBUTE}]`
                     );
@@ -2719,8 +2820,9 @@ describe("Helmet - Declarative API", () => {
             });
 
             it("does not render tag when primary attribute is null", done => {
+                const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <style>{undefined}</style>
                         </Helmet>
@@ -2728,7 +2830,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     const tagNodes = headElement.querySelectorAll(
                         `style[${HELMET_ATTRIBUTE}]`
                     );
@@ -2751,8 +2853,9 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("executes synchronously when defer={true} and async otherwise", done => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <div>
                         <Helmet defer={false}>
                             <script>window.__spy__(1)</script>
@@ -2767,7 +2870,7 @@ describe("Helmet - Declarative API", () => {
 
             expect(window.__spy__.callCount).to.equal(1);
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(window.__spy__.callCount).to.equal(2);
                 expect(window.__spy__.args).to.deep.equal([[1], [2]]);
                 done();
@@ -2812,9 +2915,14 @@ describe("Helmet - Declarative API", () => {
             `<style ${HELMET_ATTRIBUTE}="true" type="text/css">p {font-size: 12px;}</style>`
         ].join("");
 
+        before(() => {
+            Helmet.canUseDOM = false;
+        });
+
         it("provides initial values if no state is found", () => {
             const store = createHelmetStore();
-            const head = store.rewind();
+            let head = store.renderStatic();
+            head = store.renderStatic();
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toString");
@@ -2833,7 +2941,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
@@ -2852,7 +2960,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
@@ -2870,20 +2978,18 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toComponent");
 
             const titleComponent = head.title.toComponent();
 
-            expect(titleComponent)
-                .to.be.an("array")
-                .that.has.length.of(1);
+            expect(titleComponent).to.be.an("array").that.has.length.of(1);
 
             titleComponent.forEach(title => {
-                expect(title)
-                    .to.be.an("object")
+                expect(title).to.be
+                    .an("object")
                     .that.contains.property("type", "title");
             });
 
@@ -2891,8 +2997,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{titleComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedTitle}</div>`);
         });
 
@@ -2907,20 +3013,18 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toComponent");
 
             const titleComponent = head.title.toComponent();
 
-            expect(titleComponent)
-                .to.be.an("array")
-                .that.has.length.of(1);
+            expect(titleComponent).to.be.an("array").that.has.length.of(1);
 
             titleComponent.forEach(title => {
-                expect(title)
-                    .to.be.an("object")
+                expect(title).to.be
+                    .an("object")
                     .that.contains.property("type", "title");
             });
 
@@ -2928,8 +3032,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{titleComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedTitleWithItemprop}</div>`);
         });
 
@@ -2944,20 +3048,18 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.base).to.exist;
             expect(head.base).to.respondTo("toComponent");
 
             const baseComponent = head.base.toComponent();
 
-            expect(baseComponent)
-                .to.be.an("array")
-                .that.has.length.of(1);
+            expect(baseComponent).to.be.an("array").that.has.length.of(1);
 
             baseComponent.forEach(base => {
-                expect(base)
-                    .to.be.an("object")
+                expect(base).to.be
+                    .an("object")
                     .that.contains.property("type", "base");
             });
 
@@ -2965,8 +3067,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{baseComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedBaseTag}</div>`);
         });
 
@@ -2990,20 +3092,18 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toComponent");
 
             const metaComponent = head.meta.toComponent();
 
-            expect(metaComponent)
-                .to.be.an("array")
-                .that.has.length.of(5);
+            expect(metaComponent).to.be.an("array").that.has.length.of(5);
 
             metaComponent.forEach(meta => {
-                expect(meta)
-                    .to.be.an("object")
+                expect(meta).to.be
+                    .an("object")
                     .that.contains.property("type", "meta");
             });
 
@@ -3011,8 +3111,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{metaComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedMetaTags}</div>`);
         });
 
@@ -3032,20 +3132,18 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.link).to.exist;
             expect(head.link).to.respondTo("toComponent");
 
             const linkComponent = head.link.toComponent();
 
-            expect(linkComponent)
-                .to.be.an("array")
-                .that.has.length.of(2);
+            expect(linkComponent).to.be.an("array").that.has.length.of(2);
 
             linkComponent.forEach(link => {
-                expect(link)
-                    .to.be.an("object")
+                expect(link).to.be
+                    .an("object")
                     .that.contains.property("type", "link");
             });
 
@@ -3053,8 +3151,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{linkComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedLinkTags}</div>`);
         });
 
@@ -3076,20 +3174,18 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.script).to.exist;
             expect(head.script).to.respondTo("toComponent");
 
             const scriptComponent = head.script.toComponent();
 
-            expect(scriptComponent)
-                .to.be.an("array")
-                .that.has.length.of(2);
+            expect(scriptComponent).to.be.an("array").that.has.length.of(2);
 
             scriptComponent.forEach(script => {
-                expect(script)
-                    .to.be.an("object")
+                expect(script).to.be
+                    .an("object")
                     .that.contains.property("type", "script");
             });
 
@@ -3097,8 +3193,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{scriptComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedScriptTags}</div>`);
         });
 
@@ -3114,20 +3210,18 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.noscript).to.exist;
             expect(head.noscript).to.respondTo("toComponent");
 
             const noscriptComponent = head.noscript.toComponent();
 
-            expect(noscriptComponent)
-                .to.be.an("array")
-                .that.has.length.of(2);
+            expect(noscriptComponent).to.be.an("array").that.has.length.of(2);
 
             noscriptComponent.forEach(noscript => {
-                expect(noscript)
-                    .to.be.an("object")
+                expect(noscript).to.be
+                    .an("object")
                     .that.contains.property("type", "noscript");
             });
 
@@ -3135,8 +3229,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{noscriptComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedNoscriptTags}</div>`);
         });
 
@@ -3152,23 +3246,21 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.style).to.exist;
             expect(head.style).to.respondTo("toComponent");
 
             const styleComponent = head.style.toComponent();
 
-            expect(styleComponent)
-                .to.be.an("array")
-                .that.has.length.of(2);
+            expect(styleComponent).to.be.an("array").that.has.length.of(2);
 
             const markup = ReactServer.renderToStaticMarkup(
                 <div>{styleComponent}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<div>${stringifiedStyleTags}</div>`);
         });
 
@@ -3183,19 +3275,19 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
-            expect(head.title.toString())
-                .to.be.a("string")
+            expect(head.title.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedTitle);
         });
 
         it("renders title and allows children containing expressions", done => {
-            const someValue = "Some Great Title";
             const store = createHelmetStore();
+            const someValue = "Some Great Title";
 
             ReactDOM.render(
                 <HelmetProvider store={store}>
@@ -3206,14 +3298,14 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
-            raf(() => {
-                expect(head.title.toString())
-                    .to.be.a("string")
+            requestAnimationFrame(() => {
+                expect(head.title.toString()).to.be
+                    .a("string")
                     .that.equals(stringifiedTitleWithTitleExpression);
 
                 done();
@@ -3231,14 +3323,14 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
             const titleString = head.title.toString();
-            expect(titleString)
-                .to.be.a("string")
+            expect(titleString).to.be
+                .a("string")
                 .that.equals(stringifiedTitleWithItemprop);
         });
 
@@ -3253,13 +3345,13 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.base).to.exist;
             expect(head.base).to.respondTo("toString");
 
-            expect(head.base.toString())
-                .to.be.a("string")
+            expect(head.base.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedBaseTag);
         });
 
@@ -3281,13 +3373,13 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.meta).to.exist;
             expect(head.meta).to.respondTo("toString");
 
-            expect(head.meta.toString())
-                .to.be.a("string")
+            expect(head.meta.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedMetaTags);
         });
 
@@ -3307,13 +3399,13 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.link).to.exist;
             expect(head.link).to.respondTo("toString");
 
-            expect(head.link.toString())
-                .to.be.a("string")
+            expect(head.link.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedLinkTags);
         });
 
@@ -3335,13 +3427,13 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.script).to.exist;
             expect(head.script).to.respondTo("toString");
 
-            expect(head.script.toString())
-                .to.be.a("string")
+            expect(head.script.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedScriptTags);
         });
 
@@ -3357,13 +3449,13 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.style).to.exist;
             expect(head.style).to.respondTo("toString");
 
-            expect(head.style.toString())
-                .to.be.a("string")
+            expect(head.style.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedStyleTags);
         });
 
@@ -3378,7 +3470,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const {htmlAttributes} = store.rewind();
+            const {htmlAttributes} = store.renderStatic();
             const attrs = htmlAttributes.toComponent();
 
             expect(attrs).to.exist;
@@ -3387,8 +3479,8 @@ describe("Helmet - Declarative API", () => {
                 <html lang="en" {...attrs} />
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<html ${stringifiedHtmlAttributes}></html>`);
         });
 
@@ -3403,13 +3495,13 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.htmlAttributes).to.exist;
             expect(head.htmlAttributes).to.respondTo("toString");
 
-            expect(head.htmlAttributes.toString())
-                .to.be.a("string")
+            expect(head.htmlAttributes.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedHtmlAttributes);
         });
 
@@ -3424,7 +3516,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const {bodyAttributes} = store.rewind();
+            const {bodyAttributes} = store.renderStatic();
             const attrs = bodyAttributes.toComponent();
 
             expect(attrs).to.exist;
@@ -3433,8 +3525,8 @@ describe("Helmet - Declarative API", () => {
                 <body lang="en" {...attrs} />
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(`<body ${stringifiedBodyAttributes}></body>`);
         });
 
@@ -3449,20 +3541,20 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const body = store.rewind();
+            const body = store.renderStatic();
 
             expect(body.bodyAttributes).to.exist;
             expect(body.bodyAttributes).to.respondTo("toString");
 
-            expect(body.bodyAttributes.toString())
-                .to.be.a("string")
+            expect(body.bodyAttributes.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedBodyAttributes);
         });
 
         it("does not encode all characters with HTML character entity equivalents", () => {
+            const store = createHelmetStore();
             const chineseTitle = "膣膗 鍆錌雔";
             const stringifiedChineseTitle = `<title ${HELMET_ATTRIBUTE}="true">${chineseTitle}</title>`;
-            const store = createHelmetStore();
 
             ReactDOM.render(
                 <HelmetProvider store={store}>
@@ -3475,20 +3567,21 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const head = store.rewind();
+            const head = store.renderStatic();
 
             expect(head.title).to.exist;
             expect(head.title).to.respondTo("toString");
 
-            expect(head.title.toString())
-                .to.be.a("string")
+            expect(head.title.toString()).to.be
+                .a("string")
                 .that.equals(stringifiedChineseTitle);
         });
 
-        it("store.rewind() provides a fallback object for empty Helmet state", () => {
+        it("rewind() provides a fallback object for empty Helmet state", () => {
+            const store = createHelmetStore();
             ReactDOM.render(<div />, container);
 
-            const head = createHelmetStore().rewind();
+            const head = store.renderStatic();
 
             expect(head.htmlAttributes).to.exist;
             expect(head.htmlAttributes).to.respondTo("toString");
@@ -3508,8 +3601,8 @@ describe("Helmet - Declarative API", () => {
                 <div>{head.title.toComponent()}</div>
             );
 
-            expect(markup)
-                .to.be.a("string")
+            expect(markup).to.be
+                .a("string")
                 .that.equals(
                     `<div><title ${HELMET_ATTRIBUTE}="true"></title></div>`
                 );
@@ -3562,17 +3655,17 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            const {script} = store.rewind();
+            const {script} = store.renderStatic();
             const stringifiedScriptTag = script.toString();
 
-            expect(stringifiedScriptTag)
-                .to.be.a("string")
+            expect(stringifiedScriptTag).to.be
+                .a("string")
                 .that.equals(
                     `<script ${HELMET_ATTRIBUTE}="true" src="foo.js" async></script>`
                 );
         });
 
-        context("store.rewind()", () => {
+        context("renderStatic", () => {
             it("does html encode title", () => {
                 const store = createHelmetStore();
                 ReactDOM.render(
@@ -3584,7 +3677,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                const head = store.rewind();
+                const head = store.renderStatic();
 
                 expect(head.title).to.exist;
                 expect(head.title).to.respondTo("toString");
@@ -3603,20 +3696,18 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                const head = store.rewind();
+                const head = store.renderStatic();
 
                 expect(head.title).to.exist;
                 expect(head.title).to.respondTo("toComponent");
 
                 const titleComponent = head.title.toComponent();
 
-                expect(titleComponent)
-                    .to.be.an("array")
-                    .that.has.length.of(1);
+                expect(titleComponent).to.be.an("array").that.has.length.of(1);
 
                 titleComponent.forEach(title => {
-                    expect(title)
-                        .to.be.an("object")
+                    expect(title).to.be
+                        .an("object")
                         .that.contains.property("type", "title");
                 });
 
@@ -3624,15 +3715,19 @@ describe("Helmet - Declarative API", () => {
                     <div>{titleComponent}</div>
                 );
 
-                expect(markup)
-                    .to.be.a("string")
+                expect(markup).to.be
+                    .a("string")
                     .that.equals(`<div>${stringifiedTitle}</div>`);
             });
+        });
+
+        after(() => {
+            Helmet.canUseDOM = true;
         });
     });
 
     describe("misc", () => {
-        it("lets you read current state in store.peek() whether or not a DOM is present", done => {
+        it("lets you read current state in peek() whether or not a DOM is present", done => {
             const store = createHelmetStore();
             ReactDOM.render(
                 <HelmetProvider store={store}>
@@ -3643,8 +3738,12 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(store.peek().title).to.be.equal("Fancy title");
+                Helmet.canUseDOM = false;
+                expect(store.peek().title).to.be.equal("Fancy title");
+                Helmet.canUseDOM = true;
+
                 done();
             });
         });
@@ -3663,7 +3762,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 const existingTags = headElement.querySelectorAll(
                     `meta[${HELMET_ATTRIBUTE}]`
                 );
@@ -3673,8 +3772,8 @@ describe("Helmet - Declarative API", () => {
 
                 expect(existingTags.length).to.be.equal(1);
 
-                expect(existingTags)
-                    .to.have.deep.property("[0]")
+                expect(existingTags).to.have.deep
+                    .property("[0]")
                     .that.is.an.instanceof(Element);
                 expect(existingTag).to.have.property("getAttribute");
                 expect(existingTag.getAttribute("name")).to.equal(
@@ -3692,9 +3791,10 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("does not change the DOM if it recevies identical props", done => {
+            const store = createHelmetStore();
             const spy = sinon.spy();
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet onChangeClientState={spy}>
                         <meta name="description" content="Test description" />
                         <title>Test Title</title>
@@ -3703,10 +3803,10 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 // Re-rendering will pass new props to an already mounted Helmet
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet onChangeClientState={spy}>
                             <meta
                                 name="description"
@@ -3718,7 +3818,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(spy.callCount).to.equal(1);
 
                     done();
@@ -3727,11 +3827,12 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("does not write the DOM if the client and server are identical", done => {
+            const store = createHelmetStore();
             headElement.innerHTML = `<script ${HELMET_ATTRIBUTE}="true" src="http://localhost/test.js" type="text/javascript" />`;
 
             const spy = sinon.spy();
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet onChangeClientState={spy}>
                         <script
                             src="http://localhost/test.js"
@@ -3742,7 +3843,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(spy.called).to.equal(true);
 
                 const [, addedTags, removedTags] = spy.getCall(0).args;
@@ -3755,11 +3856,12 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("only adds new tags and preserves tags when rendering additional Helmet instances", done => {
+            const store = createHelmetStore();
             const spy = sinon.spy();
             let addedTags;
             let removedTags;
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet onChangeClientState={spy}>
                         <link
                             href="http://localhost/style.css"
@@ -3772,7 +3874,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(spy.called).to.equal(true);
                 addedTags = spy.getCall(0).args[1];
                 removedTags = spy.getCall(0).args[2];
@@ -3791,7 +3893,7 @@ describe("Helmet - Declarative API", () => {
 
                 // Re-rendering will pass new props to an already mounted Helmet
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet onChangeClientState={spy}>
                             <link
                                 href="http://localhost/style.css"
@@ -3812,7 +3914,7 @@ describe("Helmet - Declarative API", () => {
                     container
                 );
 
-                raf(() => {
+                requestAnimationFrame(() => {
                     expect(spy.callCount).to.equal(2);
                     addedTags = spy.getCall(1).args[1];
                     removedTags = spy.getCall(1).args[2];
@@ -3840,10 +3942,11 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("does not accept nested Helmets", done => {
+            const store = createHelmetStore();
             const warn = sinon.stub(console, "warn");
 
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet>
                         <title>Test Title</title>
                         <Helmet>
@@ -3854,7 +3957,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(document.title).to.equal("Test Title");
                 expect(warn.called).to.be.true;
 
@@ -3870,10 +3973,11 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("warns on invalid elements", done => {
+            const store = createHelmetStore();
             const warn = sinon.stub(console, "warn");
 
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet>
                         <title>Test Title</title>
                         <div>
@@ -3884,7 +3988,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(document.title).to.equal("Test Title");
                 expect(warn.called).to.be.true;
 
@@ -3899,10 +4003,11 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("warns on invalid self-closing elements", done => {
+            const store = createHelmetStore();
             const warn = sinon.stub(console, "warn");
 
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet>
                         <title>Test Title</title>
                         <div customAttribute={true} />
@@ -3911,7 +4016,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(document.title).to.equal("Test Title");
                 expect(warn.called).to.be.true;
 
@@ -3926,9 +4031,10 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("throws on invalid strings as children", () => {
+            const store = createHelmetStore();
             const renderInvalid = () =>
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title>Test Title</title>
                             <link
@@ -3947,9 +4053,10 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("throws on invalid children", () => {
+            const store = createHelmetStore();
             const renderInvalid = () =>
                 ReactDOM.render(
-                    <HelmetProvider store={createHelmetStore()}>
+                    <HelmetProvider store={store}>
                         <Helmet>
                             <title>Test Title</title>
                             <script>
@@ -3967,10 +4074,11 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("handles undefined children", done => {
+            const store = createHelmetStore();
             const charSet = undefined;
 
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet>
                         {charSet && <meta charSet={charSet} />}
                         <title>Test Title</title>
@@ -3979,7 +4087,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 expect(document.title).to.equal("Test Title");
 
                 done();
@@ -3987,8 +4095,9 @@ describe("Helmet - Declarative API", () => {
         });
 
         it("recognizes valid tags regardless of attribute ordering", done => {
+            const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={createHelmetStore()}>
+                <HelmetProvider store={store}>
                     <Helmet>
                         <meta content="Test Description" name="description" />
                     </Helmet>
@@ -3996,7 +4105,7 @@ describe("Helmet - Declarative API", () => {
                 container
             );
 
-            raf(() => {
+            requestAnimationFrame(() => {
                 const existingTags = headElement.querySelectorAll(
                     `meta[${HELMET_ATTRIBUTE}]`
                 );
@@ -4006,8 +4115,8 @@ describe("Helmet - Declarative API", () => {
 
                 expect(existingTags.length).to.be.equal(1);
 
-                expect(existingTags)
-                    .to.have.deep.property("[0]")
+                expect(existingTags).to.have.deep
+                    .property("[0]")
                     .that.is.an.instanceof(Element);
                 expect(existingTag).to.have.property("getAttribute");
                 expect(existingTag.getAttribute("name")).to.equal(
@@ -4024,8 +4133,8 @@ describe("Helmet - Declarative API", () => {
             });
         });
 
-        it("raf works as expected", done => {
-            raf(cb => {
+        it("requestAnimationFrame works as expected", done => {
+            requestAnimationFrame(cb => {
                 expect(cb).to.exist;
                 expect(cb).to.be.a("number");
 
