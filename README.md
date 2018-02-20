@@ -96,7 +96,7 @@ npm install --save react-safety-helmet
 ```
 
 ## Server Usage
-To use on the server, call `store.rewind()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
+To use on the server, call `store.renderStatic()` after `ReactDOMServer.renderToString` or `ReactDOMServer.renderToStaticMarkup` to get the head data for use in your prerender.
 
 ```javascript
 import { createHelmetStore, HelmetProvider } from 'react-safety-helmet';
@@ -107,7 +107,7 @@ ReactDOMServer.renderToString(
         <Handler />
     </HelmetProvider>
 );
-const helmet = helmetStore.rewind();
+const helmet = helmetStore.renderStatic();
 ```
 
 This `helmet` instance contains the following properties:
@@ -191,7 +191,7 @@ new Promise((resolve, reject) => {
     ).pipe(writable);
 
     writable.on('finish', () => {
-        const helmetObj = helmetStore.rewind();
+        const helmetObj = helmetStore.renderStatic();
         resolve({
             body: writable.buffer,
             helmet,
@@ -300,7 +300,7 @@ new Promise((resolve, reject) => {
 
 ### Where is `Helmet.rewind()`, `Helmet.renderStatic()` and `peek()` ?
 
-#### Use helmetStore.rewind() instead of Helmet.rewind() and Helmet.renderStatic()
+#### Use helmetStore.renderStatic() instead of Helmet.rewind() and Helmet.renderStatic()
 
 ``` javascript
 const helmetStore = createHelmetStore();
@@ -313,7 +313,7 @@ ReactDOMServer.renderToString(
     </HelmetProvider>
 );
 
-const head = helmetStore.rewind();
+const head = helmetStore.renderStatic();
 ```
 
 #### Use helmetStore.peek() instead of Helmet.peek()
