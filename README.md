@@ -167,22 +167,7 @@ function HTML () {
 ## Server Usage with `ReactDOMServer.renderToNodeStream()` and `ReactDOMServer.renderToStaticNodeStream()`
 
 ``` javascript
-import stream from 'stream';
-
-class DrainWritable extends stream.Writable {
-    constructor(options) {
-        super(options);
-        this.buffer = '';
-    }
-
-    _write(chunk, encoding, cb) {
-        this.buffer += chunk;
-        cb();
-    }
-}
-
 new Promise((resolve, reject) => {
-    const writable = new DrainWritable();
     const helmetStore = createHelmetStore();
     let body = '';
     ReactDOMServer.renderToNodeStream(
