@@ -184,20 +184,24 @@ class DrainWritable extends stream.Writable {
 new Promise((resolve, reject) => {
     const writable = new DrainWritable();
     const helmetStore = createHelmetStore();
+    let body = '';
     ReactDOMServer.renderToNodeStream(
         <HelmetProvider store={helmetStore}>
           <App />
         </HelmetProvider>,
-    ).pipe(writable);
-
-    writable.on('finish', () => {
-        const helmetObj = helmetStore.renderStatic();
+    )
+      .on('data', (chunk) => {
+        body += chunk;
+      })
+      .on('error', (err) => {
+        reject(err);
+      })
+      .on('end', () => {
         resolve({
-            body: writable.buffer,
-            helmet,
+          body,
+          helmet: helmetStore.renderStatic(),
         });
-    });
-    writable.on('error', reject);
+      });
 }).then(({body, helmet}) => {
     // Create html with body and helmet object
 });
