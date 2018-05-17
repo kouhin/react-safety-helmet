@@ -1,3 +1,17 @@
+<a name="6.2.1"></a>
+## [6.2.1](https://github.com/openameba/react-safety-helmet/compare/v6.2.0...v6.2.1) (2018-05-17)
+
+
+
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/openameba/react-safety-helmet/compare/v6.1.0...v6.2.0) (2018-02-20)
+
+
+
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/openameba/react-safety-helmet/compare/5.2.0...v6.1.0) (2018-02-09)
+
+
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/nfl/react-helmet/compare/5.1.3...5.2.0) (2017-08-29)
 

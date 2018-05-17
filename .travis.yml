@@ -2,9 +2,9 @@ language: node_js
 
 node_js:
   - 'node'
-  - 6
-  - 5
-  - 4
+  - 10
+  - 9
+  - 8
 
 install:
   - npm i -g npm@latest
