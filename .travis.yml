@@ -7,8 +7,8 @@ node_js:
   - 8
 
 install:
-  - npm i -g npm@latest
-  - npm install
+  - npm i -g yarn@latest
+  - yarn install
 
 before_install:
   - export CHROME_BIN=chromium-browser
