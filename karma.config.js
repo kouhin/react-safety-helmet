@@ -14,7 +14,7 @@ module.exports = function(config) {
 
         client: {
             mocha: {
-                bail: true,
+                bail: false,
                 reporter: "html"
             }
         },
@@ -41,6 +41,7 @@ module.exports = function(config) {
         },
 
         webpack: {
+            mode: "development",
             devtool: "inline-source-map",
             module: {
                 rules: [
@@ -79,14 +80,11 @@ module.exports = function(config) {
         // Start these browsers, currently available:
         // - Chrome
         // - ChromeCanary
-        // - Firefox
+        // - Firefox (has to be installed with `npm install karma-firefox-launcher`)
         // - Opera (has to be installed with `npm install karma-opera-launcher`)
         // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
-        // - PhantomJS
         // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-        browsers: process.env.TRAVIS
-            ? ["ChromeTravis", "PhantomJS"]
-            : ["Chrome", "PhantomJS", "Firefox"],
+        browsers: process.env.TRAVIS ? ["ChromeTravis"] : ["Chrome"],
 
         customLaunchers: {
             ChromeTravis: {

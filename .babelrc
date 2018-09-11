@@ -2,19 +2,18 @@
     "env": {
         "commonjs": {
             "presets": [
-                ["env", {
+                ["@babel/preset-env", {
                     "targets": {
                         "browsers": ["last 1 versions", "ie >= 10"]
                     },
                     "modules": "commonjs",
                     "loose": true,
-                    "useBuiltIns": true
+                    "useBuiltIns": 'usage'
                 }]
             ],
             "plugins": [
-                "transform-export-extensions",
-                "transform-class-properties",
-                "transform-object-rest-spread",
+                "@babel/plugin-proposal-class-properties",
+                "@babel/plugin-proposal-object-rest-spread",
                 "transform-remove-strict-mode"
             ]
         },
@@ -28,28 +27,26 @@
                         "**/Test*"
                     ]
                 }],
-                "transform-export-extensions",
-                "transform-class-properties",
-                "transform-object-rest-spread",
+                "@babel/plugin-proposal-class-properties",
+                "@babel/plugin-proposal-object-rest-spread",
                 "transform-remove-strict-mode"
             ]
         }
     },
     "presets": [
-        ["env", {
+        ["@babel/preset-env", {
             "targets": {
                 "browsers": ["last 1 versions", "ie >= 10"]
             },
             "modules": false,
             "loose": true,
-            "useBuiltIns": true
+            "useBuiltIns": 'usage'
         }],
-        "react"
+        "@babel/preset-react"
     ],
     "plugins": [
-        "transform-export-extensions",
-        "transform-class-properties",
-        "transform-object-rest-spread",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-object-rest-spread",
         "transform-remove-strict-mode"
     ]
 }
