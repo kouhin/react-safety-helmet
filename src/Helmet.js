@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createSideEffect from "react-reffect";
-import deepEqual from "deep-equal";
+import deepEqual from "react-fast-compare";
 import {
     convertReactPropstoHtmlAttributes,
     handleClientStateChange,
