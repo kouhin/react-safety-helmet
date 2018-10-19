@@ -35,10 +35,10 @@
     "react": ">=16.3.0"
   },
   "dependencies": {
-    "deep-equal": "^1.0.1",
     "exenv": "^1.2.2",
     "object-assign": "^4.1.1",
     "prop-types": "^15.6.2",
+    "react-fast-compare": "^2.0.2",
     "react-reffect": "^2.3.2"
   },
   "devDependencies": {
