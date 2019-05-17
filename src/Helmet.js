@@ -23,6 +23,10 @@ const {
     useRef
 } = React;
 
+const useIsomorphicEffect = ExecutionEnvironment.canUseDOM
+    ? useLayoutEffect
+    : useEffect;
+
 const HelmetContext = createContext();
 HelmetContext.displayName = "HelmetContext";
 
@@ -60,14 +64,21 @@ function HelmetProvider({
     children,
     store = createHelmetStore()
 }) {
+    const prevReducedState = useRef(null);
     const dispatch = useCallback(
         action => {
             const nextState = rootReducer(store.state, action);
             if (store.setState(nextState, action)) {
                 if (canUseDOM) {
-                    handleClientStateChange(
-                        reducePropsToState(store.state.propsList)
+                    const nextReducedState = reducePropsToState(
+                        store.state.propsList
                     );
+                    if (
+                        !deepEqual(prevReducedState.current, nextReducedState)
+                    ) {
+                        prevReducedState.current = nextReducedState;
+                        handleClientStateChange(nextReducedState);
+                    }
                 }
             }
             return nextState;
@@ -276,7 +287,7 @@ function generateUniqueString() {
     );
 }
 
-function useHelmet(props) {
+function useHelmet(props = {}) {
     const instance = useMemo(() => generateUniqueString(), []);
     const dispatch = useContext(HelmetContext);
     const called = useRef(false);
@@ -287,13 +298,17 @@ function useHelmet(props) {
         }
         prevProps.current = props;
         const {children, ...restProps} = props;
-        let newProps = {...restProps};
+        let newProps = {
+            defer: true,
+            encodeSpecialCharacters: true,
+            ...restProps
+        };
         if (children) {
             newProps = mapChildrenToProps(children, newProps);
         }
         dispatch(addProps(instance, newProps));
     }, [dispatch, instance, props]);
-    useLayoutEffect(() => {
+    useIsomorphicEffect(() => {
         // componentDidMount, componentDidUpdate
         if (called.current) {
             sideEffect();
@@ -316,11 +331,6 @@ const Helmet = props => {
 };
 
 Helmet.displayName = "Helmet";
-
-Helmet.defaultProps = {
-    defer: true,
-    encodeSpecialCharacters: true
-};
 
 if (process.env.NODE_ENV !== "production") {
     /**

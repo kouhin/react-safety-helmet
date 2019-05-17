@@ -16,27 +16,8 @@ Helmet _takes_ plain HTML tags and _outputs_ plain HTML tags. It's dead simple, 
 *This is a fork of [react-helmet](https://github.com/nfl/react-helmet).*
 
 ## Example
-```javascript
-import React from "react";
-import {Helmet} from "react-safety-helmet";
 
-class Application extends React.Component {
-  render () {
-    return (
-        <div className="application">
-            <Helmet>
-                <meta charSet="utf-8" />
-                <title>My Title</title>
-                <link rel="canonical" href="http://mysite.com/example" />
-            </Helmet>
-            ...
-        </div>
-    );
-  }
-};
-```
-
-or with react hooks
+### With React Hooks API `useHelmet(props)`
 
 ``` javascript
 import React from "react";
@@ -60,6 +41,28 @@ function Application() {
       {/* ... */}
     </div>
   );
+};
+```
+
+### With Declarative API `<Helmet props>`
+
+```javascript
+import React from "react";
+import {Helmet} from "react-safety-helmet";
+
+class Application extends React.Component {
+  render () {
+    return (
+        <div className="application">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>My Title</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
+            ...
+        </div>
+    );
+  }
 };
 ```
 
@@ -220,6 +223,138 @@ new Promise((resolve, reject) => {
 ```
 
 ## Reference Guide
+
+### React Hooks API `useHelmet(props)`
+
+``` javascript
+useHelmet({
+  /* (optional) set to false to disable string encoding (server-only) */
+  encodeSpecialCharacters: true,
+  /*
+    (optional) Useful when you want titles to inherit from a template:
+    useHelmet({
+      titleTemplate: "%s | MyAwesomeWebsite.com",
+      title: "My Title"
+    });
+
+    outputs:
+
+    <head>
+        <title>Nested Title | MyAwesomeWebsite.com</title>
+    </head>
+  */,
+  titleTemplate: "MySite.com - %s",
+  /*
+    (optional) used as a fallback when a template exists but a title is not defined
+
+    useHelmet({
+      defaultTitle: "My Site",
+      titleTemplate: "My Site - %s"
+    });
+
+    outputs:
+
+    <head>
+        <title>My Site</title>
+    </head>
+  */
+  defaultTitle: "My Default Title",
+  /* (optional) callback that tracks DOM changes  */
+  onChangeClientState: (newState) => console.log(newState),
+  /* html attributes */
+  htmlAttributes: {
+    lang: "en"
+    amp: true,
+  },
+  /* body attributes */
+  bodyAttributes: {
+    className: "root"
+  },
+  /* title attributes and value */
+  title: `My Plain Title or ${dynamic} title`,
+  titleAttributes: {
+    itemProp: "name",
+    lang: "en",
+  },
+  /* base element */
+  base: {
+    target: "_blank",
+    href: "http://mysite.com/"
+  },
+  /* multiple meta elements */
+  meta: [
+    {
+      name: "description",
+      content: "Helmet application"
+    },
+    {
+      property: "og:type",
+      content: "article"
+    }
+  ],
+  /* multiple link elements */
+  link: [
+    {
+      rel: "canonical",
+      href: "http://mysite.com/example"
+    },
+    {
+      rel: "apple-touch-icon",
+      href: "http://mysite.com/img/apple-touch-icon-57x57.png"
+    },
+    {
+      rel: "apple-touch-icon"
+      sizes: "72x72"
+      href: "http://mysite.com/img/apple-touch-icon-72x72.png"
+    },
+    ...locales.map((locale) => ({
+        rel: "alternate",
+        href: `http://example.com/${locale}`
+        hrefLang: locale
+    }))
+  ],
+  /* multiple script elements */
+  script: [
+    {
+      src: "http://include.com/pathtojs.js",
+      type: "text/javascript"
+    }
+    /* inline script elements */
+    {
+      type: "application/ld+json"
+      innerHTML: `
+        {
+            "@context": "http://schema.org"
+        }
+      `
+    }
+  ],
+  noscript: [
+    /* noscript elements */
+    {
+      innerHTML: `
+        <link rel="stylesheet" type="text/css" href="foo.css" />
+      `
+    }
+  ],
+  /* inline style elements */
+  style: [
+    {
+      innerHTML: `
+        body {
+            background-color: blue;
+        }
+
+        p {
+            font-size: 12px;
+        }
+      `
+    }
+  ]
+});
+```
+
+### Declarative API `<Helmet props>`
 
 ```javascript
 <Helmet

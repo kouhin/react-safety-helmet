@@ -13,19 +13,6 @@
     "rules": {
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "error",
-        "prettier/prettier": [
-            "error",
-            {
-                "printWidth": 80,
-                "tabWidth": 4,
-                "singleQuote": false,
-                "trailingComma": "none",
-                "bracketSpacing": false,
-                "semi": true,
-                "useTabs": false,
-                "parser": "babel",
-                "jsxBracketSameLine": false
-            }
-        ]
+        "prettier/prettier": "error"
     }
 }
