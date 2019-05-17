@@ -1,12 +1,4 @@
-import React, {
-    createContext,
-    useLayoutEffect,
-    useEffect,
-    useCallback,
-    useMemo,
-    useContext,
-    useRef
-} from "react";
+import React from "react";
 import ExecutionEnvironment from "exenv";
 import PropTypes from "prop-types";
 import deepEqual from "react-fast-compare";
@@ -20,6 +12,16 @@ import {
 } from "./HelmetUtils";
 import {TAG_NAMES, VALID_TAG_NAMES} from "./HelmetConstants";
 import rootReducer, {addProps, removeProps} from "./modules";
+
+const {
+    createContext,
+    useLayoutEffect,
+    useEffect,
+    useCallback,
+    useMemo,
+    useContext,
+    useRef
+} = React;
 
 const HelmetContext = createContext();
 HelmetContext.displayName = "HelmetContext";

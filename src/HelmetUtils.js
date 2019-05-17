@@ -32,7 +32,11 @@ const getTitleFromPropsList = propsList => {
 
     if (innermostTemplate && innermostTitle) {
         // use function arg to avoid need to escape $ characters
-        return innermostTemplate.replace(/%s/g, () => innermostTitle);
+        return innermostTemplate.replace(/%s/g, () =>
+            Array.isArray(innermostTitle)
+                ? innermostTitle.join("")
+                : innermostTitle
+        );
     }
 
     const innermostDefaultTitle = getInnermostProperty(
