@@ -7,7 +7,7 @@
 [![Build Status](https://travis-ci.org/openameba/react-safety-helmet.svg?branch=master)](https://travis-ci.org/openameba/react-safety-helmet)
 [![Dependency Status](https://img.shields.io/david/openameba/react-safety-helmet.svg?style=flat-square)](https://david-dm.org/openameba/react-safety-helmet)
 
-A fork of react-helmet that support for renderToNodeStream and thread safe with the power of redux
+A fork of react-helmet that support for renderToNodeStream and thread safe, , provides both react hooks and declarative api.
 
 This reusable React component will manage all of your changes to the document head.
 
@@ -33,6 +33,33 @@ class Application extends React.Component {
         </div>
     );
   }
+};
+```
+
+or with react hooks
+
+``` javascript
+import React from "react";
+import {useHelmet} from "react-safety-helmet";
+
+function Application() {
+  useHelmet({
+    meta: {
+      charSet: "utf-8"
+    },
+    title: "My Title",
+    link: [
+      {
+        rel: "canonical",
+        href: "http://mysite.com/example"
+      }
+    ]
+  });
+  return (
+    <div className="application">
+      {/* ... */}
+    </div>
+  );
 };
 ```
 
@@ -292,7 +319,9 @@ new Promise((resolve, reject) => {
 #### Use helmetStore.renderStatic() instead of Helmet.rewind() and Helmet.renderStatic()
 
 ``` javascript
-const helmetStore = createHelmetStore();
+const helmetStore = createHelmetStore(() => {
+  // helmetStore changed
+});
 ReactDOMServer.renderToString(
     <HelmetProvider store={helmetStore}>
         <Helmet>

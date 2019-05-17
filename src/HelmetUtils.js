@@ -1,5 +1,4 @@
 import React from "react";
-import objectAssign from "object-assign";
 import {
     ATTRIBUTE_NAMES,
     HELMET_ATTRIBUTE,
@@ -174,11 +173,10 @@ const getTagsFromPropsList = (tagName, primaryAttributes, propsList) => {
             const keys = Object.keys(instanceSeenTags);
             for (let i = 0; i < keys.length; i++) {
                 const attributeKey = keys[i];
-                const tagUnion = objectAssign(
-                    {},
-                    approvedSeenTags[attributeKey],
-                    instanceSeenTags[attributeKey]
-                );
+                const tagUnion = {
+                    ...approvedSeenTags[attributeKey],
+                    ...instanceSeenTags[attributeKey]
+                };
 
                 approvedSeenTags[attributeKey] = tagUnion;
             }

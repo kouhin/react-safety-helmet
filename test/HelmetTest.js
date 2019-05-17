@@ -4,7 +4,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactServer from "react-dom/server";
-import {Helmet, HelmetProvider, createHelmetStore} from "../src/Helmet";
+import {Helmet, HelmetProvider, createHelmetStore} from "../src";
 import {requestAnimationFrame} from "../src/HelmetUtils.js";
 
 const HELMET_ATTRIBUTE = "data-react-helmet";
@@ -2647,10 +2647,6 @@ describe("Helmet", () => {
             `<style ${HELMET_ATTRIBUTE}="true" type="text/css">p {font-size: 12px;}</style>`
         ].join("");
 
-        before(() => {
-            Helmet.canUseDOM = false;
-        });
-
         it("provides initial values if no state is found", () => {
             const store = createHelmetStore();
             let head = store.renderStatic();
@@ -2665,7 +2661,7 @@ describe("Helmet", () => {
         it("encodes special characters in title", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet title="Dangerous <script> include" />
                 </HelmetProvider>,
                 container
@@ -2682,7 +2678,7 @@ describe("Helmet", () => {
         it("opts out of string encoding", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         encodeSpecialCharacters={false}
                         title={"This is text and & and '."}
@@ -2701,7 +2697,7 @@ describe("Helmet", () => {
         it("renders title as React component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet title={"Dangerous <script> include"} />
                 </HelmetProvider>,
                 container
@@ -2736,7 +2732,7 @@ describe("Helmet", () => {
         it("renders title with itemprop name as React component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         title={"Title with Itemprop"}
                         titleAttributes={{itemprop: "name"}}
@@ -2776,7 +2772,7 @@ describe("Helmet", () => {
         it("renders base tag as React component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         base={{target: "_blank", href: "http://localhost/"}}
                     />
@@ -2813,7 +2809,7 @@ describe("Helmet", () => {
         it("renders meta tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         meta={[
                             {charset: "utf-8"},
@@ -2863,10 +2859,13 @@ describe("Helmet", () => {
         it("renders link tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         link={[
-                            {href: "http://localhost/helmet", rel: "canonical"},
+                            {
+                                href: "http://localhost/helmet",
+                                rel: "canonical"
+                            },
                             {
                                 href: "http://localhost/style.css",
                                 rel: "stylesheet",
@@ -2907,7 +2906,7 @@ describe("Helmet", () => {
         it("renders script tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         script={[
                             {
@@ -2953,7 +2952,7 @@ describe("Helmet", () => {
         it("renders noscript tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         noscript={[
                             {
@@ -3001,7 +3000,7 @@ describe("Helmet", () => {
         it("renders style tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         style={[
                             {
@@ -3041,7 +3040,7 @@ describe("Helmet", () => {
         it("renders title tag as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet title={"Dangerous <script> include"} />
                 </HelmetProvider>,
                 container
@@ -3060,7 +3059,7 @@ describe("Helmet", () => {
         it("renders title with itemprop name as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         title={"Title with Itemprop"}
                         titleAttributes={{itemprop: "name"}}
@@ -3083,7 +3082,7 @@ describe("Helmet", () => {
         it("renders base tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         base={{target: "_blank", href: "http://localhost/"}}
                     />
@@ -3104,7 +3103,7 @@ describe("Helmet", () => {
         it("renders meta tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         meta={[
                             {charset: "utf-8"},
@@ -3138,10 +3137,13 @@ describe("Helmet", () => {
         it("renders link tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         link={[
-                            {href: "http://localhost/helmet", rel: "canonical"},
+                            {
+                                href: "http://localhost/helmet",
+                                rel: "canonical"
+                            },
                             {
                                 href: "http://localhost/style.css",
                                 rel: "stylesheet",
@@ -3166,7 +3168,7 @@ describe("Helmet", () => {
         it("renders script tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         script={[
                             {
@@ -3196,7 +3198,7 @@ describe("Helmet", () => {
         it("renders style tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         style={[
                             {
@@ -3226,7 +3228,7 @@ describe("Helmet", () => {
         it("renders html attributes as component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         htmlAttributes={{
                             lang: "ga",
@@ -3254,7 +3256,7 @@ describe("Helmet", () => {
         it("renders html attributes as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         htmlAttributes={{
                             lang: "ga",
@@ -3281,7 +3283,7 @@ describe("Helmet", () => {
 
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <div>
                         <Helmet title={chineseTitle} />
                     </div>
@@ -3302,7 +3304,7 @@ describe("Helmet", () => {
         it("rewind() provides a fallback object for empty Helmet state", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <div />
                 </HelmetProvider>,
                 container
@@ -3374,7 +3376,7 @@ describe("Helmet", () => {
         it("does not render undefined attribute values", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet
                         script={[
                             {
@@ -3396,9 +3398,6 @@ describe("Helmet", () => {
                     `<script ${HELMET_ATTRIBUTE}="true" src="foo.js" async></script>`
                 );
         });
-        after(() => {
-            Helmet.canUseDOM = true;
-        });
     });
 
     describe("misc", () => {
@@ -3413,10 +3412,6 @@ describe("Helmet", () => {
 
             requestAnimationFrame(() => {
                 expect(store.peek().title).to.be.equal("Fancy title");
-                Helmet.canUseDOM = false;
-                expect(store.peek().title).to.be.equal("Fancy title");
-                Helmet.canUseDOM = true;
-
                 done();
             });
         });

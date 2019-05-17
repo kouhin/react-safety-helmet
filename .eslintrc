@@ -9,11 +9,13 @@
         "expect": false,
         "sinon": false
     },
-    "plugins": [
-        "prettier"
-    ],
+    "plugins": ["react-hooks", "prettier"],
     "rules": {
-        "prettier/prettier": ["error", {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
+        "prettier/prettier": [
+            "error",
+            {
                 "printWidth": 80,
                 "tabWidth": 4,
                 "singleQuote": false,
@@ -21,7 +23,7 @@
                 "bracketSpacing": false,
                 "semi": true,
                 "useTabs": false,
-                "parser": "babylon",
+                "parser": "babel",
                 "jsxBracketSameLine": false
             }
         ]

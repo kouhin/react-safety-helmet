@@ -2,14 +2,18 @@
     "env": {
         "commonjs": {
             "presets": [
-                ["@babel/preset-env", {
-                    "targets": {
-                        "browsers": ["last 1 versions", "ie >= 10"]
-                    },
-                    "modules": "commonjs",
-                    "loose": true,
-                    "useBuiltIns": 'usage'
-                }]
+                [
+                    "@babel/preset-env",
+                    {
+                        "targets": {
+                            "browsers": ["last 1 versions", "ie >= 10"]
+                        },
+                        "modules": "commonjs",
+                        "loose": true,
+                        "corejs": 2,
+                        "useBuiltIns": "usage"
+                    }
+                ]
             ],
             "plugins": [
                 "@babel/plugin-proposal-class-properties",
@@ -19,14 +23,17 @@
         },
         "test": {
             "plugins": [
-                ["istanbul", {
-                    "exclude": [
-                        "**/node_modules/**",
-                        "**/packages/**",
-                        "**/test/**",
-                        "**/Test*"
-                    ]
-                }],
+                [
+                    "istanbul",
+                    {
+                        "exclude": [
+                            "**/node_modules/**",
+                            "**/packages/**",
+                            "**/test/**",
+                            "**/Test*"
+                        ]
+                    }
+                ],
                 "@babel/plugin-proposal-class-properties",
                 "@babel/plugin-proposal-object-rest-spread",
                 "transform-remove-strict-mode"
@@ -34,14 +41,18 @@
         }
     },
     "presets": [
-        ["@babel/preset-env", {
-            "targets": {
-                "browsers": ["last 1 versions", "ie >= 10"]
-            },
-            "modules": false,
-            "loose": true,
-            "useBuiltIns": 'usage'
-        }],
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "browsers": ["last 1 versions", "ie >= 10"]
+                },
+                "modules": false,
+                "loose": true,
+                "corejs": 2,
+                "useBuiltIns": "usage"
+            }
+        ],
         "@babel/preset-react"
     ],
     "plugins": [

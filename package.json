@@ -1,8 +1,10 @@
 {
   "name": "react-safety-helmet",
-  "description": "A fork of react-helmet that support for renderToNodeStream and thread safe with the power of redux",
+  "description": "A fork of react-helmet that support for renderToNodeStream and thread safe, provides both react hooks and declarative api",
   "version": "6.3.0",
-  "main": "./lib/Helmet.js",
+  "main": "./lib/index.js",
+  "module": "es/index.js",
+  "sideEffect": false,
   "author": "Bin Hou <houbin217jz@gmail.com> (https://github.com/kouhin)",
   "contributors": [
     "NFL <engineers@nfl.com>",
@@ -17,6 +19,7 @@
     "react-helmet",
     "nfl",
     "react",
+    "hook",
     "document",
     "head",
     "title",
@@ -32,14 +35,13 @@
     "renderToStaticNodeStream"
   ],
   "peerDependencies": {
-    "react": ">=16.3.0"
+    "react": ">=16.8.0"
   },
   "dependencies": {
+    "core-js": "2",
     "exenv": "^1.2.2",
-    "object-assign": "^4.1.1",
     "prop-types": "^15.7.2",
-    "react-fast-compare": "^2.0.4",
-    "react-reffect": "^2.3.2"
+    "react-fast-compare": "^2.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -66,6 +68,7 @@
     "eslint-plugin-mocha": "^5.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "istanbul": "^0.4.5",
     "karma": "^4.1.0",
     "karma-chai": "^0.1.0",
