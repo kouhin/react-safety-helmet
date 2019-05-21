@@ -311,6 +311,14 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-syntax-optional-catch-binding" "^7.2.0"
 
+"@babel/plugin-proposal-private-methods@^7.4.4":
+  version "7.4.4"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-private-methods/-/plugin-proposal-private-methods-7.4.4.tgz#307b7db29d8ae2d259e7c0e6e665b1922d7ac856"
+  integrity sha512-EIV4fDVP3XwdizJ/H6308Km+d8xdLAUCAvsY8mjxhat9I3vNgssGhZuhgn/jw7IK5/91sN8PHtVGxMjeTSrSng==
+  dependencies:
+    "@babel/helper-create-class-features-plugin" "^7.4.4"
+    "@babel/helper-plugin-utils" "^7.0.0"
+
 "@babel/plugin-proposal-unicode-property-regex@^7.4.4":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-unicode-property-regex/-/plugin-proposal-unicode-property-regex-7.4.4.tgz#501ffd9826c0b91da22690720722ac7cb1ca9c78"

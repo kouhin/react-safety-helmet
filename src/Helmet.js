@@ -30,63 +30,86 @@ const useIsomorphicEffect = ExecutionEnvironment.canUseDOM
 const HelmetContext = createContext();
 HelmetContext.displayName = "HelmetContext";
 
-const createHelmetStore = subscribe => {
-    const store = {
-        state: rootReducer()
-    };
-    store.peek = () => {
+class HelmetStore {
+    #state;
+    #peekCache;
+    #canUseDOM;
+    #subscribe;
+    #prevReducedState;
+
+    constructor(opts = {}) {
+        this.#state = rootReducer();
+        this.#peekCache = null;
+        this.#prevReducedState = null;
+        this.#subscribe = opts.subscribe;
+        this.#canUseDOM = opts.canUseDOM || ExecutionEnvironment.canUseDOM;
+    }
+
+    peek = () => {
         if (
-            !store.peekCache ||
-            !store.peekCache.key ||
-            store.peekCache.key !== store.state
+            !this.#peekCache ||
+            !this.#peekCache.key ||
+            this.#peekCache.key !== this.#state
         ) {
-            store.peekCache = {
-                key: store.state,
-                value: reducePropsToState(store.state.propsList)
+            this.#peekCache = {
+                key: this.#state,
+                value: reducePropsToState(this.#state.propsList)
             };
         }
-        return store.peekCache.value;
+        return this.#peekCache.value;
     };
-    store.renderStatic = () => mapStateOnServer(store.peek());
-    store.setState = (state, action) => {
-        if (state !== store.state) {
-            store.state = state;
-            if (subscribe) subscribe(action);
+
+    renderStatic = () => {
+        return mapStateOnServer(this.peek());
+    };
+
+    setState = (state, action) => {
+        if (state !== this.#state) {
+            this.#state = state;
+            if (this.#subscribe) this.#subscribe(action);
             return true;
         }
         return false;
     };
-    return store;
+
+    getState = () => {
+        return this.#state;
+    };
+
+    dispatch = action => {
+        const nextState = rootReducer(this.#state, action);
+        if (this.setState(nextState, action)) {
+            if (this.#canUseDOM) {
+                const nextReducedState = reducePropsToState(
+                    this.#state.propsList
+                );
+                if (!deepEqual(this.#prevReducedState, nextReducedState)) {
+                    this.#prevReducedState = nextReducedState;
+                    handleClientStateChange(nextReducedState);
+                }
+            }
+        }
+        return nextState;
+    };
+}
+
+const createHelmetStore = subscribe => {
+    return new HelmetStore({
+        subscribe
+    });
 };
 
 function HelmetProvider({
     canUseDOM = ExecutionEnvironment.canUseDOM,
     children,
-    store = createHelmetStore()
+    store
 }) {
-    const prevReducedState = useRef(null);
-    const dispatch = useCallback(
-        action => {
-            const nextState = rootReducer(store.state, action);
-            if (store.setState(nextState, action)) {
-                if (canUseDOM) {
-                    const nextReducedState = reducePropsToState(
-                        store.state.propsList
-                    );
-                    if (
-                        !deepEqual(prevReducedState.current, nextReducedState)
-                    ) {
-                        prevReducedState.current = nextReducedState;
-                        handleClientStateChange(nextReducedState);
-                    }
-                }
-            }
-            return nextState;
-        },
-        [canUseDOM, store]
-    );
+    const helmetStore = useMemo(() => store || createHelmetStore({canUseDOM}), [
+        store,
+        canUseDOM
+    ]);
     return (
-        <HelmetContext.Provider value={dispatch}>
+        <HelmetContext.Provider value={helmetStore.dispatch}>
             {children}
         </HelmetContext.Provider>
     );
@@ -97,9 +120,11 @@ if (process.env.NODE_ENV !== "production") {
         canUseDOM: PropTypes.bool,
         children: PropTypes.node,
         store: PropTypes.shape({
-            current: PropTypes.object,
+            dispatch: PropTypes.func,
+            getState: PropTypes.func,
             peek: PropTypes.func,
             renderStatic: PropTypes.func,
+            setState: PropTypes.func,
             subscribe: PropTypes.func
         })
     };
@@ -290,6 +315,11 @@ function generateUniqueString() {
 function useHelmet(props = {}) {
     const instance = useMemo(() => generateUniqueString(), []);
     const dispatch = useContext(HelmetContext);
+    if (!dispatch) {
+        throw new Error(
+            "You should not use useHelmet() or <Helmet> outside a <HelmetProvider>."
+        );
+    }
     const called = useRef(false);
     const prevProps = useRef();
     const sideEffect = useCallback(() => {

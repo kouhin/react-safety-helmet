@@ -1,7 +1,7 @@
 {
   "name": "react-safety-helmet",
   "description": "A fork of react-helmet that support for renderToNodeStream and thread safe, provides both react hooks and declarative api",
-  "version": "6.3.0",
+  "version": "7.0.0-beta.1",
   "main": "./lib/Helmet.js",
   "module": "es/Helmet.js",
   "sideEffect": false,
@@ -16,8 +16,8 @@
     "url": "https://github.com/openameba/react-safety-helmet"
   },
   "keywords": [
-    "react-helmet",
-    "nfl",
+    "react",
+    "helmet",
     "react",
     "hook",
     "document",
@@ -47,6 +47,7 @@
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/plugin-proposal-private-methods": "^7.4.4",
     "@babel/plugin-transform-strict-mode": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
