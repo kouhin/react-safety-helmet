@@ -6,7 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactServer from "react-dom/server";
 
-import {Helmet, HelmetProvider, createHelmetStore} from "../src/Helmet";
+import {Helmet, HelmetProvider, createHelmetStore} from "../src";
 import {HTML_TAG_MAP} from "../src/HelmetConstants";
 import {requestAnimationFrame} from "../src/HelmetUtils.js";
 
@@ -2944,7 +2944,7 @@ describe("Helmet - Declarative API", () => {
         it("encodes special characters in title", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <title>{`Dangerous <script> include`}</title>
                     </Helmet>
@@ -2963,7 +2963,7 @@ describe("Helmet - Declarative API", () => {
         it("opts out of string encoding", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet encodeSpecialCharacters={false}>
                         <title>{"This is text and & and '."}</title>
                     </Helmet>
@@ -2981,7 +2981,7 @@ describe("Helmet - Declarative API", () => {
         it("renders title as React component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <title>{`Dangerous <script> include`}</title>
                     </Helmet>
@@ -3018,7 +3018,7 @@ describe("Helmet - Declarative API", () => {
         it("renders title with itemprop name as React component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <title itemProp="name">Title with Itemprop</title>
                     </Helmet>
@@ -3057,7 +3057,7 @@ describe("Helmet - Declarative API", () => {
         it("renders base tag as React component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <base target="_blank" href="http://localhost/" />
                     </Helmet>
@@ -3094,7 +3094,7 @@ describe("Helmet - Declarative API", () => {
         it("renders meta tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <meta charSet="utf-8" />
                         <meta
@@ -3140,7 +3140,7 @@ describe("Helmet - Declarative API", () => {
         it("renders link tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <link href="http://localhost/helmet" rel="canonical" />
                         <link
@@ -3182,7 +3182,7 @@ describe("Helmet - Declarative API", () => {
         it("renders script tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <script
                             src="http://localhost/test.js"
@@ -3226,7 +3226,7 @@ describe("Helmet - Declarative API", () => {
         it("renders noscript tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <noscript id="foo">{`<link rel="stylesheet" type="text/css" href="/style.css" />`}</noscript>
                         <noscript id="bar">{`<link rel="stylesheet" type="text/css" href="/style2.css" />`}</noscript>
@@ -3264,7 +3264,7 @@ describe("Helmet - Declarative API", () => {
         it("renders style tags as React components", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <style type="text/css">{`body {background-color: green;}`}</style>
                         <style type="text/css">{`p {font-size: 12px;}`}</style>
@@ -3296,7 +3296,7 @@ describe("Helmet - Declarative API", () => {
         it("renders title tag as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <title>{"Dangerous <script> include"}</title>
                     </Helmet>
@@ -3319,7 +3319,7 @@ describe("Helmet - Declarative API", () => {
             const someValue = "Some Great Title";
 
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <title>Title: {someValue}</title>
                     </Helmet>
@@ -3344,7 +3344,7 @@ describe("Helmet - Declarative API", () => {
         it("renders title with itemprop name as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <title itemProp="name">Title with Itemprop</title>
                     </Helmet>
@@ -3366,7 +3366,7 @@ describe("Helmet - Declarative API", () => {
         it("renders base tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <base target="_blank" href="http://localhost/" />
                     </Helmet>
@@ -3387,12 +3387,12 @@ describe("Helmet - Declarative API", () => {
         it("renders meta tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <meta charSet="utf-8" />
                         <meta
                             name="description"
-                            content="Test description &amp; encoding of special characters like &#x27; &quot; &gt; &lt; `"
+                            content='Test description &amp; encoding of special characters like &#x27; " &gt; &lt; `'
                         />
                         <meta httpEquiv="content-type" content="text/html" />
                         <meta property="og:type" content="article" />
@@ -3415,7 +3415,7 @@ describe("Helmet - Declarative API", () => {
         it("renders link tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <link href="http://localhost/helmet" rel="canonical" />
                         <link
@@ -3441,7 +3441,7 @@ describe("Helmet - Declarative API", () => {
         it("renders script tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <script
                             src="http://localhost/test.js"
@@ -3469,7 +3469,7 @@ describe("Helmet - Declarative API", () => {
         it("renders style tags as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <style type="text/css">{`body {background-color: green;}`}</style>
                         <style type="text/css">{`p {font-size: 12px;}`}</style>
@@ -3491,7 +3491,7 @@ describe("Helmet - Declarative API", () => {
         it("renders html attributes as component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <html lang="ga" className="myClassName" />
                     </Helmet>
@@ -3516,7 +3516,7 @@ describe("Helmet - Declarative API", () => {
         it("renders html attributes as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <html lang="ga" className="myClassName" />
                     </Helmet>
@@ -3537,7 +3537,7 @@ describe("Helmet - Declarative API", () => {
         it("renders body attributes as component", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <body lang="ga" className="myClassName" />
                     </Helmet>
@@ -3562,7 +3562,7 @@ describe("Helmet - Declarative API", () => {
         it("renders body attributes as string", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <body lang="ga" className="myClassName" />
                     </Helmet>
@@ -3586,7 +3586,7 @@ describe("Helmet - Declarative API", () => {
             const stringifiedChineseTitle = `<title ${HELMET_ATTRIBUTE}="true">${chineseTitle}</title>`;
 
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <div>
                         <Helmet>
                             <title>{chineseTitle}</title>
@@ -3676,7 +3676,7 @@ describe("Helmet - Declarative API", () => {
         it("does not render undefined attribute values", () => {
             const store = createHelmetStore();
             ReactDOM.render(
-                <HelmetProvider store={store}>
+                <HelmetProvider canUseDOM={false} store={store}>
                     <Helmet>
                         <script src="foo.js" async={undefined} />
                     </Helmet>
@@ -3698,7 +3698,7 @@ describe("Helmet - Declarative API", () => {
             it("does html encode title", () => {
                 const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={store}>
+                    <HelmetProvider canUseDOM={false} store={store}>
                         <Helmet>
                             <title>{`Dangerous <script> include`}</title>
                         </Helmet>
@@ -3717,7 +3717,7 @@ describe("Helmet - Declarative API", () => {
             it("renders title as React component", () => {
                 const store = createHelmetStore();
                 ReactDOM.render(
-                    <HelmetProvider store={store}>
+                    <HelmetProvider canUseDOM={false} store={store}>
                         <Helmet>
                             <title>{`Dangerous <script> include`}</title>
                         </Helmet>
@@ -3751,10 +3751,6 @@ describe("Helmet - Declarative API", () => {
                     .that.equals(`<div>${stringifiedTitle}</div>`);
             });
         });
-
-        after(() => {
-            Helmet.canUseDOM = true;
-        });
     });
 
     describe("misc", () => {
@@ -3771,10 +3767,6 @@ describe("Helmet - Declarative API", () => {
 
             requestAnimationFrame(() => {
                 expect(store.peek().title).to.be.equal("Fancy title");
-                Helmet.canUseDOM = false;
-                expect(store.peek().title).to.be.equal("Fancy title");
-                Helmet.canUseDOM = true;
-
                 done();
             });
         });

@@ -1,5 +1,4 @@
 import React from "react";
-import objectAssign from "object-assign";
 import {
     ATTRIBUTE_NAMES,
     HELMET_ATTRIBUTE,
@@ -33,7 +32,11 @@ const getTitleFromPropsList = propsList => {
 
     if (innermostTemplate && innermostTitle) {
         // use function arg to avoid need to escape $ characters
-        return innermostTemplate.replace(/%s/g, () => innermostTitle);
+        return innermostTemplate.replace(/%s/g, () =>
+            Array.isArray(innermostTitle)
+                ? innermostTitle.join("")
+                : innermostTitle
+        );
     }
 
     const innermostDefaultTitle = getInnermostProperty(
@@ -174,11 +177,10 @@ const getTagsFromPropsList = (tagName, primaryAttributes, propsList) => {
             const keys = Object.keys(instanceSeenTags);
             for (let i = 0; i < keys.length; i++) {
                 const attributeKey = keys[i];
-                const tagUnion = objectAssign(
-                    {},
-                    approvedSeenTags[attributeKey],
-                    instanceSeenTags[attributeKey]
-                );
+                const tagUnion = {
+                    ...approvedSeenTags[attributeKey],
+                    ...instanceSeenTags[attributeKey]
+                };
 
                 approvedSeenTags[attributeKey] = tagUnion;
             }

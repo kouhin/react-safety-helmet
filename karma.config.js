@@ -14,7 +14,7 @@ module.exports = function(config) {
 
         client: {
             mocha: {
-                bail: false,
+                bail: true,
                 reporter: "html"
             }
         },
@@ -22,11 +22,10 @@ module.exports = function(config) {
         // frameworks to use
         frameworks: ["chai-sinon", "mocha"],
 
-        files: ["./test/test.js"],
+        files: ["./test/*.js"],
 
         preprocessors: {
-            // add webpack as preprocessor
-            "./test/test.js": ["webpack", "sourcemap"]
+            "./test/*.js": ["rollup", "sourcemap"]
         },
 
         coverageReporter: {
@@ -40,24 +39,32 @@ module.exports = function(config) {
             ]
         },
 
-        webpack: {
-            mode: "development",
-            devtool: "inline-source-map",
-            module: {
-                rules: [
-                    {
-                        test: /\.js$/,
-                        // exclude this dirs from coverage
-                        exclude: [/node_modules/],
-                        loader: "babel-loader"
-                    }
-                ]
+        rollupPreprocessor: {
+            output: {
+                format: "iife",
+                name: "helmet",
+                sourcemap: "inline"
             },
-            watch: true
-        },
-
-        webpackServer: {
-            noInfo: true
+            plugins: [
+                require("rollup-plugin-replace")({
+                    "process.env.NODE_ENV": "'development'"
+                }),
+                require("rollup-plugin-babel")({
+                    exclude: "node_modules/**",
+                    plugins: [
+                        [
+                            "istanbul",
+                            {
+                                exclude: ["**/node_modules/**", "**/test/**"]
+                            }
+                        ]
+                    ]
+                }),
+                require("rollup-plugin-node-resolve")({
+                    browser: true
+                }),
+                require("rollup-plugin-commonjs")()
+            ]
         },
 
         // test results reporter to use
@@ -80,9 +87,10 @@ module.exports = function(config) {
         // Start these browsers, currently available:
         // - Chrome
         // - ChromeCanary
-        // - Firefox (has to be installed with `npm install karma-firefox-launcher`)
+        // - Firefox
         // - Opera (has to be installed with `npm install karma-opera-launcher`)
         // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
+        // - PhantomJS
         // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
         browsers: process.env.TRAVIS ? ["ChromeTravis"] : ["Chrome"],
 
