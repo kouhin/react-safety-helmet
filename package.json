@@ -3,6 +3,7 @@
   "description": "A fork of react-helmet that support for renderToNodeStream and thread safe with the power of redux",
   "version": "6.3.0",
   "main": "./lib/Helmet.js",
+  "module": "./src/Helmet.js",
   "author": "Bin Hou <houbin217jz@gmail.com> (https://github.com/kouhin)",
   "contributors": [
     "NFL <engineers@nfl.com>",
